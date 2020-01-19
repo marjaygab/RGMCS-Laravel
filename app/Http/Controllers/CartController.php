@@ -8,6 +8,27 @@ use Illuminate\Http\Request;
 
 class CartController extends Controller
 {
+
+    public function index(Request $request)
+    {
+        return view('cart');
+    }
+
+
+    public function removeCartItem(Request $request)
+    {
+
+        $cartid = $request->route('cartid');
+        if (self::deleteCartItem($cartid)) {
+            return back();
+        }else{
+            return back()->withErrors(['msg'=>"An error occured while removing item from cart. Cart ID: " . $cartid]);
+        }
+    }
+
+
+
+
     public function addToCart(Request $request)
     {
         $transactionTypeId = $request->post('transaction_type');
@@ -17,7 +38,7 @@ class CartController extends Controller
             $transactionType = TransactionTypeController::getTransactionType(['id'=>$transactionTypeId],true);
             $itemNo = $request->post('itemno');
             $vid = $request->post('vendor');
-            $vendor = VendorController::getVendor(['vid'=>$vid],true)->vendor;
+            $vendor = VendorController::getVendor($vid,true)->vendor;
             $unit_cost = $request->post('unit_cost');
             $tDate = $request->post('tdate');
             $qtyIn = 0;
@@ -40,12 +61,26 @@ class CartController extends Controller
         }
     }
 
+    public static function getCartItem($cartid = null,$first = null)
+    {
+        if ($cartid != null) {
+            $parameters = ['id'=>$cartid];
+        }else{
+            $parameters = null;
+        }
+
+        $result = RGMCSFactory::fetchRows(new Cart(),env("DB_CONFIG_" . env('DEVICE_CODE') . "_DB"),$parameters,$first);
+
+        return $result;
+    }
+
     public static function getCartItemCount()
     {
-        $result = RGMCSFactory::fetchRows(new Cart(),env("DB_CONFIG_" . env('DEVICE_CODE') . "_DB"),null);
+        $result = self::getCartItem(null,null);
 
         return $result->count();
     }
+
 
     public static function insertCartItem($transactionType,$itemNo,$vendor,$unit_cost,$qtyIn,$qtyOut,$tDate)
     {
@@ -63,5 +98,20 @@ class CartController extends Controller
         $result = RGMCSFactory::insertRows(new Cart(),env("DB_CONFIG_".env('DEVICE_CODE')."_DB"),$parameters);
 
         return $result > 0;
+    }
+
+    public static function deleteCartItem($cartid)
+    {
+
+        $parameters = ['id'=>$cartid];
+        $result = RGMCSFactory::deleteRows(new Cart(),env("DB_CONFIG_".env('DEVICE_CODE')."_DB"),$parameters);
+
+        return $result > 0;
+    }
+
+    public static function clearCart()
+    {
+        $cart = new Cart();
+        return RGMCSFactory::clearTable($cart,env("DB_CONFIG_".env('DEVICE_CODE')."_DB"));
     }
 }

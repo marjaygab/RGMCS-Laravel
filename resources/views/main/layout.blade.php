@@ -149,7 +149,7 @@
 	<script src="{{asset('vendor/jquery-easing/jquery.easing.min.js')}}"></script>
 
 	<!-- Custom scripts for all pages-->
-	<script src="{{asset('js/sb-admin-2.min.js')}}"></script>
+    <script src="{{asset('js/sb-admin-2.min.js')}}"></script>
 
 
 
@@ -162,7 +162,8 @@
 	<!-- <script src="../dist/js/demo/chart-area-demo.js"></script>
 	<script src="../dist/js/demo/chart-pie-demo.js"></script> -->
 	<script src="{{asset('vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.js')}}"></script>
-	<script src="{{asset('js/demo/datatables-demo.js')}}"></script>
+    <script src="{{asset('js/demo/datatables-demo.js')}}"></script>
+    <script src="{{asset('js/demo/toggler.js')}}"></script>
     
 </body>
 

@@ -14,10 +14,10 @@ class CreateItemCatalog extends Migration
     public function up()
     {
         Schema::create('item_catalog', function (Blueprint $table) {
-            $table->unsignedInteger('id')->autoIncrement();
+            $table->unsignedInteger('id')->autoIncrement(); 
             $table->string('itemdesc',99);
-            $table->string('unit',10);
-            $table->string('item_type',64);
+            $table->unsignedInteger('unit_id');
+            $table->unsignedInteger('item_type_id');
             $table->timestamps();
         });
     }

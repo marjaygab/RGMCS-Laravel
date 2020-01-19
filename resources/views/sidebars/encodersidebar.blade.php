@@ -29,7 +29,7 @@
         </div>
         
     <li class="nav-item">
-        <a class="nav-link" href="charts.html">
+        <a class="nav-link" href="{{route('cart')}}">
             <i class="fas fa-fw fa-shopping-cart"></i>
             <span>Cart</span> <span class='badge badge-right badge-pill badge-light text-danger'>{{CartController::getCartItemCount()}}</span>
         </a>
@@ -45,7 +45,7 @@
         <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Vendor Manager</h6>
             <a class="collapse-item" href="{{route('encode')}}">Encode Transactions</a>
-            <a class="collapse-item" href="buttons.html">View Transactions</a>
+            <a class="collapse-item" href="{{route('viewtransactions')}}">View Transactions</a>
         </div>
     </div>
 </li>
@@ -91,7 +91,7 @@
     <hr class="sidebar-divider d-none d-md-block">
     
     <li class="nav-item">
-        <a class="nav-link" href="/logout">
+        <a class="nav-link" href="{{route('logout')}}">
             <i class="fas fa-fw fa-sign-out-alt"></i>
             <span>Logout</span></a>
     </li>

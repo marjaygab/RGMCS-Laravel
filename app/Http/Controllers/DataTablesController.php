@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 class DataTablesController extends Controller
 {
     //
-    public static function generateResult(Request $request,$model,$dbConfig,array $columns,$whereParam)
+    public static function generateResult(Request $request,$model,$dbConfig,array $columns,$whereParam,$additionalParam = null)
     {
         $model->setConnection($dbConfig);
         $result = $model->get();
@@ -21,28 +21,68 @@ class DataTablesController extends Controller
 
         if ($request->post("search")['value'] != null) {
             $searchValue = $request->post("search")['value'];
-            $result = $model->where($whereParam,'like',$searchValue . '%')
-            ->orderBy($columns[$request->post("order")[0]['column']],$request->post("order")[0]['dir'])->get();
-            $totalFiltered = $result->count();
 
-            $result = $model->where($whereParam,'like',$searchValue . '%')
-            ->orderBy($columns[$request->post("order")[0]['column']],$request->post("order")[0]['dir'])
-            ->offset($request->post("start"))
-            ->limit($request->post("length"))
-            ->get();
-
-        } else {
-
-            if ($request->post('length') == -1) {
+            if ($additionalParam != null) {
                 $result = $model
-                ->orderBy($columns[$request->post("order")[0]['column']],$request->post("order")[0]['dir'])
-                ->get();
-            } else {
+                ->where($whereParam,'like',$searchValue . '%')
+                ->orWhere($additionalParam)
+                ->orderBy($columns[$request->post("order")[0]['column']],$request->post("order")[0]['dir'])->get();
+                
+                $totalFiltered = $result->count();
+
                 $result = $model
+                ->where($whereParam,'like',$searchValue . '%')
+                ->orWhere($additionalParam)
                 ->orderBy($columns[$request->post("order")[0]['column']],$request->post("order")[0]['dir'])
                 ->offset($request->post("start"))
                 ->limit($request->post("length"))
                 ->get();
+            }else{
+                $result = $model
+                ->where($whereParam,'like',$searchValue . '%')
+                ->orderBy($columns[$request->post("order")[0]['column']],$request->post("order")[0]['dir'])->get();
+                
+                $totalFiltered = $result->count();
+    
+                $result = $model
+                ->where($whereParam,'like',$searchValue . '%')
+                ->orderBy($columns[$request->post("order")[0]['column']],$request->post("order")[0]['dir'])
+                ->offset($request->post("start"))
+                ->limit($request->post("length"))
+                ->get();
+            }
+
+
+            
+
+        } else {
+
+            if ($request->post('length') == -1) {
+                if ($additionalParam != null) {
+                    $result = $model
+                    ->where([$additionalParam])
+                    ->orderBy($columns[$request->post("order")[0]['column']],$request->post("order")[0]['dir'])
+                    ->get();
+                }else{
+                    $result = $model
+                    ->orderBy($columns[$request->post("order")[0]['column']],$request->post("order")[0]['dir'])
+                    ->get();
+                }
+            } else {
+                if ($additionalParam != null) {
+                    $result = $model
+                    ->where([$additionalParam])
+                    ->orderBy($columns[$request->post("order")[0]['column']],$request->post("order")[0]['dir'])
+                    ->offset($request->post("start"))
+                    ->limit($request->post("length"))
+                    ->get();
+                }else{
+                    $result = $model
+                    ->orderBy($columns[$request->post("order")[0]['column']],$request->post("order")[0]['dir'])
+                    ->offset($request->post("start"))
+                    ->limit($request->post("length"))
+                    ->get();
+                }
             }
             
 

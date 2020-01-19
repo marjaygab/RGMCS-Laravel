@@ -7,5 +7,5 @@ use Illuminate\Database\Eloquent\Model;
 class Price extends Model
 {
     //
-    protected $table = "pricelist";
+    protected $table = "price_list";
 }

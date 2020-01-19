@@ -7,5 +7,5 @@ use Illuminate\Database\Eloquent\Model;
 class ItemList extends Model
 {
     //
-    protected $table = "item_list";
+    protected $table = "item_list_view";
 }

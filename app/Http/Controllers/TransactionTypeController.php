@@ -23,6 +23,19 @@ class TransactionTypeController extends Controller
 
     }
 
+    public static function getFlow($description)
+    {
+        $parameters = ['description'=>$description];
+
+        $result = RGMCSFactory::fetchRows(new TransactionType(),env('DB_CONFIG_REFERENCES'),$parameters,true);
+        
+        if ($result['flow'] == null) {
+            return false;
+        }else{
+            return $result['flow'];
+        }
+    }
+
     public static function generateOptionString($vid=null){
 
         $data = self::getTransactionType(null,null);

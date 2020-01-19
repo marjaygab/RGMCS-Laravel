@@ -42,7 +42,7 @@ class VendorBinController extends Controller
     public function markVendor(Request $request)
     {
         $vid = $request->route('markvendorid');
-        $vendorObj = VendorController::getVendor($vid);
+        $vendorObj = VendorController::getVendor($vid,true);
         $parameters = array(
             'vid'=>$vid,
             'vendor'=>$vendorObj->vendor,

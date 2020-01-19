@@ -17,5 +17,16 @@ class PriceController extends Controller
         return $result;
     }
 
+    public function setPrice($itemno,$price)
+    {
+        $parameters = [
+            'price'=>$price
+        ];
+
+        $result = RGMCSFactory::updateRows(new Price(),env('DB_CONFIG_WAREHOUSE_ENCODER_DB'),['itemno',"=",$itemno],$parameters);
+
+        return $result > 0;
+    }
+
     
 }

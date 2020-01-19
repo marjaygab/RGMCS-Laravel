@@ -18,7 +18,7 @@ class VendorController extends Controller
     public function editVendor(Request $request)
     {
         $vid = $request->route('editvendorid');
-        $vendor = RGMCSFactory::fetchRows(new Vendor(),env('DB_CONFIG_REFERENCES'),['vid'=>$vid],true);
+        $vendor = RGMCSFactory::fetchRows(new Vendor(),env('DB_CONFIG_REFERENCES'),['id'=>$vid],true);
 
         $toPass = [
             'editvendorid'=>$vendor->vid,
@@ -48,7 +48,7 @@ class VendorController extends Controller
             'vcontact'=>$vcontact,
         ];
 
-        $success = RGMCSFactory::updateRows(new Vendor(),env('DB_CONFIG_REFERENCES'),['vid'=>$vid],$parameters);
+        $success = RGMCSFactory::updateRows(new Vendor(),env('DB_CONFIG_REFERENCES'),['id'=>$vid],$parameters);
 
         if ($success > 0) {
             return redirect('/vendors');
@@ -61,7 +61,13 @@ class VendorController extends Controller
     public static function getVendor($vid = null,$first = null)
     {
         
-        $result = RGMCSFactory::fetchRows(new Vendor(),env('DB_CONFIG_REFERENCES'),$vid,$first);
+        if ($vid == null) {
+            $parameters = null;
+        }else{
+            $parameters = ['id'=>$vid];
+        }
+
+        $result = RGMCSFactory::fetchRows(new Vendor(),env('DB_CONFIG_REFERENCES'),$parameters,$first);
 
         if ($result != null) {
             return $result;
@@ -101,11 +107,11 @@ class VendorController extends Controller
         
         foreach ($binContents as $key => $value) {
             echo $value->vid;
-            RGMCSFactory::deleteRows(new Vendor(),env('DB_CONFIG_REFERENCES'),['vid'=>$value->vid]);
+            RGMCSFactory::deleteRows(new Vendor(),env('DB_CONFIG_REFERENCES'),['id'=>$value->vid]);
         }
 
         $vendorBinController = new VendorBinController();
-        $vendorBinController->clear();
+        $vendorBinController->clearVendor();
 
         return back();
     }
@@ -152,7 +158,7 @@ class VendorController extends Controller
             $nestedData[] = $vendor['vperson'];
             $nestedData[] = $vendor['vaddress'];
             $nestedData[] = $vendor['vcontact'];
-            $vendorid = $vendor['vid'];
+            $vendorid = $vendor['id'];
             $route = route('editvendors',['editvendorid'=>$vendorid]);
             $markRoute = route('markvendor',['markvendorid'=>$vendorid]);
 

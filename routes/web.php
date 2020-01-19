@@ -48,7 +48,15 @@ Route::get('/encode','TransactionsController@index')->name('encode');
 Route::get('/encode/{encodeitemno}','TransactionsController@encodeItem')->name('encodeitemno');
 
 
+Route::get('/cart','CartController@index')->name('cart');
+Route::get('/cart/clear','CartController@clearCart')->name('clearcart');
+Route::get('/cart/remove/{cartid}','CartController@removeCartItem')->name('removecartitem');
+
 Route::post('/cart/add','CartController@addToCart')->name('addtocart');
+
+Route::get('/transaction/view','TransactionsController@viewTransactions')->name('viewtransactions');
+Route::get('/transaction/view/{itemno}','TransactionsController@viewTransactions')->name('viewitemtransactions');
+Route::get('/transaction/processcart','TransactionsController@processCart')->name('processcart');
 
 
 Route::get('/units',function(){
@@ -62,6 +70,10 @@ Route::post('/fetchvendors','VendorController@getAll')->name('fetchvendors');
 Route::post('/fetchvendorbin','VendorBinController@getAll')->name('fetchvendorbin');
 Route::post('/fetchitembin','ItemBinController@getAll')->name('fetchitembin');
 Route::post('/fetchitemoverview','ItemOverviewController@getAll')->name('fetchitemoverview');
+Route::post('/fetchcartitems','CartOverviewController@getAll')->name('fetchcartitems');
+
+Route::post('/fetchtransactions','TransactionsOverviewController@getAll')->name('fetchtransactions');
+Route::post('/fetchtransactions/{itemno}','TransactionsOverviewController@getAll')->name('fetchitemtransactions');
 
 
 

@@ -100,11 +100,13 @@ class RGMCSFactory extends Controller
 
     public static function clearBin($binModel)
     {
-        self::truncateRows($binModel,env('DB_CONFIG_REFERENCES'));
-        return back();
+        return self::clearTable($binModel,env('DB_CONFIG_REFERENCES'));
     }
 
-
-    
+    public static function clearTable($model,$environment)
+    {
+        self::truncateRows($model,$environment);
+        return back();
+    }
 
 }

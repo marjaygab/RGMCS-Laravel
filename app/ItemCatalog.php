@@ -8,5 +8,4 @@ class ItemCatalog extends Model
 {
     //
     protected $table = "item_catalog";
-    public $timestamps = false;
 }

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class ChangeItemCatalogTimestamps extends Migration
+class AddForeignKeys extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,10 @@ class ChangeItemCatalogTimestamps extends Migration
      */
     public function up()
     {
-        //
         Schema::table('item_catalog',function (Blueprint $table)
         {
-            $table->dateTime('created_at')->useCurrent()->change();
-            // $table->timestamp('update_at');
+            $table->foreign('unit_id')->references('id')->on('units');
+            $table->foreign('item_type_id')->references('id')->on('item_types');
         });
     }
 
@@ -28,10 +27,10 @@ class ChangeItemCatalogTimestamps extends Migration
      */
     public function down()
     {
-        //
         Schema::table('item_catalog',function (Blueprint $table)
         {
-            $table->dropColumn('created_at');
+            $table->dropForeign('unit_id');
+            $table->dropForeign('item_type_id');
         });
     }
 }

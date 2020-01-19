@@ -108,7 +108,7 @@
     <hr class="sidebar-divider d-none d-md-block">
     
     <li class="nav-item">
-        <a class="nav-link" href="/logout">
+        <a class="nav-link" href="{{route('logout')}}">
             <i class="fas fa-fw fa-sign-out-alt"></i>
             <span>Logout</span></a>
     </li>

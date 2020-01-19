@@ -7,5 +7,5 @@ use Illuminate\Database\Eloquent\Model;
 class TransactionType extends Model
 {
     //
-    protected $table = "transactiontypes";
+    protected $table = "transaction_types";
 }

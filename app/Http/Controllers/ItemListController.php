@@ -23,14 +23,14 @@ class ItemListController extends Controller
         $data=array();
         foreach ($result['result'] as $key => $item) {
             $nestedData=array(); 
-            $addtype = "1".substr($item['item_type'],0,1)."1";
-            $idnum = $addtype .  str_pad($item["itemno"], 6, '0', STR_PAD_LEFT);
+            $addtype = "1".substr($item['type'],0,1)."1";
+            $idnum = $addtype .  str_pad($item["id"], 6, '0', STR_PAD_LEFT);
 
             $nestedData[] = $idnum;
             $nestedData[] = $item["itemdesc"];
-            $nestedData[] = $item["unit"];
-            $itemno = $item['itemno'];
-            $route = route('edititems',['edititemno'=>$itemno]);
+            $nestedData[] = $item["unit_code"];
+            $id = $item['id'];
+            $route = route('edititems',['edititemno'=>$id]);
             $editAction = "<a href='$route' class='btn btn-primary btn-icon-split btn-sm'>
             <span class='icon text-white-50'>
               <i class='fas fa-edit'></i>
@@ -38,7 +38,7 @@ class ItemListController extends Controller
             <span class='text'>Edit Item</span>
           </a>";
 
-          $markRoute = route('markitem',['markitemno'=>$itemno]);
+          $markRoute = route('markitem',['markitemno'=>$id]);
           $csrf = csrf_token();
 
             $markAction = "<form action='$markRoute' method='POST'>
@@ -56,7 +56,7 @@ class ItemListController extends Controller
     public static function getItem($itemno)
     {
         $itemList = new  ItemList();
-        $item = RGMCSFactory::fetchRows($itemList,env('DB_CONFIG_REFERENCES'),['itemno'=>$itemno],true);
+        $item = RGMCSFactory::fetchRows($itemList,env('DB_CONFIG_REFERENCES'),['id'=>$itemno],true);
         if ($item != null) {
             return $item;
         }else{
