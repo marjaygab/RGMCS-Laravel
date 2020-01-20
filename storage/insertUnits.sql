@@ -95,6 +95,17 @@ INNER JOIN rgmcs_references_db.item_list_view AS r
 ON t.itemno = r.id
 
 
+-- IF WAREHOUSE
+CREATE OR REPLACE VIEW stocks_overview_view AS
+SELECT r.id,r.itemdesc,r.unit_code,r.type,s.qty
+FROM rgmcs_warehouse_encoder_db.stocks AS s   
+INNER JOIN rgmcs_references_db.item_list_view AS r
+ON s.itemno = r.id;
+
+
+
+
+
 
 
 USE rgmcs_renes_encoder_db;
@@ -135,6 +146,19 @@ ON i.item_type_id = t.id
 INNER JOIN rgmcs_warehouse_encoder_db.pricelist AS w
 ON s.itemno = w.itemno;
 
+
+INSERT INTO `scpfailedjobs` (`datetimeoffailure`, `datetimeoftransaction`, `referenceid`, `cif`, `crn`, `accountnumber`, `lastname`, `middlename`, `firstname`, `birthdate`, `solid`, `jobcode`, `jobdescription`, `document`, `documenttypeid`, `sssnumber`, `cardtype`, `additionalpayload`, `processeddatetime`) 
+VALUES
+('2020-01-10 07:34:35', '2020-01-10 07:32:21', '9dd43228-9b69-4580-a6d3-82609e71a20a', 'R910000742', '003364889430', '109830014330', 'ESGUERRA JR', 'ADOR DIONISIO', 'DANTE', '1974-12-23', '1015', 'Upload_SFTP', 'Failed to upload file to SFTP', 798471, NULL, '3364889430', 'QCAO', NULL, NULL),
+('2020-01-10 07:35:35', '2020-01-10 07:32:21', '9dd43228-9b69-4580-a6d3-82609e71a20a', 'R910000742', '003364889430', '109830014330', 'ESGUERRA JR', 'ADOR DIONISIO', 'DANTE', '1974-12-23', '1015', 'Upload_EDMS', 'Failed to upload file to EDMS', 567983, 194, '3364889430', 'QCAO', NULL, NULL),
+('2020-01-10 07:35:37', '2020-01-10 07:32:21', '9dd43228-9b69-4580-a6d3-82609e71a20a', 'R910000742', '003364889430', '109830014330', 'ESGUERRA JR', 'ADOR DIONISIO', 'DANTE', '1974-12-23', '1015', 'Upload_EDMS', 'Failed to upload file to EDMS', 345987, 195, '3364889430', 'QCAO', NULL, NULL),
+('2020-01-10 07:35:39', '2020-01-10 07:32:21', '9dd43228-9b69-4580-a6d3-82609e71a20a', 'R910000742', '003364889430', '109830014330', 'ESGUERRA JR', 'ADOR DIONISIO', 'DANTE', '1974-12-23', '1015', 'Upload_EDMS', 'Failed to upload file to EDMS', 123456, 15, '3364889430', 'QCAO', NULL, NULL),
+('2020-01-10 07:35:41', '2020-01-10 07:32:21', '9dd43228-9b69-4580-a6d3-82609e71a20a', 'R910000742', '003364889430', '109830014330', 'ESGUERRA JR', 'ADOR DIONISIO', 'DANTE', '1974-12-23', '1015', 'Upload_EDMS', 'Failed to upload file to EDMS', 048593, 251, '3364889430', 'QCAO', NULL, NULL),
+('2020-01-10 07:35:43', '2020-01-10 07:32:21', '9dd43228-9b69-4580-a6d3-82609e71a20a', 'R910000742', '003364889430', '109830014330', 'ESGUERRA JR', 'ADOR DIONISIO', 'DANTE', '1974-12-23', '1015', 'Upload_EDMS', 'Failed to upload file to EDMS', 234859, 193, '3364889430', 'QCAO', NULL, NULL),
+('2020-01-10 07:35:45', '2020-01-10 07:32:21', '9dd43228-9b69-4580-a6d3-82609e71a20a', 'R910000742', '003364889430', '109830014330', 'ESGUERRA JR', 'ADOR DIONISIO', 'DANTE', '1974-12-23', '1015', 'Upload_EDMS', 'Failed to upload file to EDMS', 294738, 194, '3364889430', 'QCAO', NULL, NULL),
+('2020-01-10 07:35:47', '2020-01-10 07:32:21', '9dd43228-9b69-4580-a6d3-82609e71a20a', 'R910000742', '003364889430', '109830014330', 'ESGUERRA JR', 'ADOR DIONISIO', 'DANTE', '1974-12-23', '1015', 'Upload_SVS', 'Failed to upload file to SVS', 346539, NULL, '3364889430', 'QCAO', NULL, NULL),
+('2020-01-10 07:37:20', '2020-01-10 07:32:21', '9dd43228-9b69-4580-a6d3-82609e71a20a', 'R910000742', '003364889430', '109830014330', 'ESGUERRA JR', 'ADOR DIONISIO', 'DANTE', '1974-12-23', '1015', 'Upload_SVS', 'Failed to upload file to SVS', 346539, NULL, '3364889430', 'QCAO', NULL, NULL),
+('2020-01-10 07:41:34', '2020-01-10 07:32:21', '9dd43228-9b69-4580-a6d3-82609e71a20a', 'R910000742', '003364889430', '109830014330', 'ESGUERRA JR', 'ADOR DIONISIO', 'DANTE', '1974-12-23', '1015', 'Upload_SVS', 'Failed to upload file to SVS', 346539, NULL, '3364889430', 'QCAO', NULL, NULL);
 
 
 

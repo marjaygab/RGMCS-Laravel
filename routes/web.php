@@ -59,6 +59,10 @@ Route::get('/transaction/view/{itemno}','TransactionsController@viewTransactions
 Route::get('/transaction/processcart','TransactionsController@processCart')->name('processcart');
 
 
+Route::get('/stocks','StockController@index')->name('stocks');
+
+
+
 Route::get('/units',function(){
     return UnitController::generateOptionString();
 })->name('units');
@@ -71,6 +75,7 @@ Route::post('/fetchvendorbin','VendorBinController@getAll')->name('fetchvendorbi
 Route::post('/fetchitembin','ItemBinController@getAll')->name('fetchitembin');
 Route::post('/fetchitemoverview','ItemOverviewController@getAll')->name('fetchitemoverview');
 Route::post('/fetchcartitems','CartOverviewController@getAll')->name('fetchcartitems');
+Route::post('/fetchstocks','StocksOverviewController@getAll')->name('fetchstocks');
 
 Route::post('/fetchtransactions','TransactionsOverviewController@getAll')->name('fetchtransactions');
 Route::post('/fetchtransactions/{itemno}','TransactionsOverviewController@getAll')->name('fetchitemtransactions');

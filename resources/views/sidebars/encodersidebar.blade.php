@@ -51,7 +51,7 @@
 </li>
 
     <li class="nav-item">
-        <a class="nav-link" href="charts.html">
+        <a class="nav-link" href="{{route('stocks')}}">
             <i class="fas fa-fw fa-boxes"></i>
             <span>Stocks</span></a>
         </li>

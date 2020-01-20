@@ -146,6 +146,41 @@ $(document).ready(function () {
 		}
 	});
 
+	$('#stocksOverviewTable').DataTable({
+		"lengthMenu": [10, 25, 50, 75, 100],
+		"pageLength": 10,
+		"responsive": true,
+		"processing": true,
+		"order": [1, 'asc'],
+		"serverSide": true,
+		"columnDefs": [
+			{ "width": "30%","className":"text-center", "targets": 5 },
+			{ "width": "10%", "targets": [3,4] }
+		],
+		"ajax": {
+			url: (base_url + "/fetchstocks"),
+			type: "post",
+			headers: {
+				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			}
+		}, "initComplete": function () {
+			var input = $('.dataTables_filter input').unbind(),
+				self = this.api(),
+				$searchButton = $('<button class="btn btn-primary btn-sm ml-1">')
+					.text('Search')
+					.click(function () {
+						self.search(input.val()).draw();
+					}),
+				$clearButton = $('<button class="btn btn-danger btn-sm ml-1">')
+					.text('Reset')
+					.click(function () {
+						input.val('');
+						$searchButton.click();
+					})
+			$('.dataTables_filter').append($searchButton, $clearButton);
+		}
+	});
+
 
 
 	$('#transactionsTable').DataTable({

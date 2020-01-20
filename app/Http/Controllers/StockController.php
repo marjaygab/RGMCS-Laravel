@@ -10,7 +10,7 @@ class StockController extends Controller
     //
     public function index(Request $request)
     {
-        # code...
+        return view('stocks');
     }
 
     public static function setQty($itemno,$qtyin,$qtyout)
