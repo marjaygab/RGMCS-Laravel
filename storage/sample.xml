@@ -1,33 +1,69 @@
+<!-- <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <project>
     <firstName>ANTOÑIO RYAN</firstName>
-    <middleName>Ñ</middleName>
-    <lastName>ANTOÑIO RYAN</lastName>
-    <date>Jan 20, 2020</date>
-    <ggDebit>I explicitly authorize Union Bank of the Philippines to enroll me in the GetGo Rewards Program and pursuant thereto, to share my relevant information with Cebu Air, Inc..</ggDebit>
-    <citySavings>I consent to the disclosure by UnionBank of my Personal Data to CitySavings Bank for its product and service offerings (i.e. promotional loan and pensionado loan).</citySavings>
-    <cardnumber>187628768</cardnumber>
-    <verifiedBy></verifiedBy>
-    <issuedBy></issuedBy>
-    <saNumber></saNumber>
-    <branch></branch>
-    <new>[ ]</new>
-    <replace>[X]</replace>
-</project>
-
-
-
-<project>
-    <firstName>ANTOÑIO RYAN</firstName>
-    <middleName>Ñ</middleName>
-    <lastName>ANTOÑIO RYAN</lastName>
-    <date>Jan 20, 2020</date>
+    <middleName>BRIOÑES</middleName>
+    <lastName>SANTO NIÑO SR</lastName>
+    <date>Jan 21, 2020</date>
     <ggDebit>I explicitly authorize Union Bank of the Philippines to enroll me in the GetGo Rewards Program and pursuant thereto, to share my relevant information with Cebu Air, Inc..</ggDebit>
     <citySavings>I consent to the disclosure by UnionBank of my Personal Data to CitySavings Bank for its product and service offerings (i.e. promotional loan and pensionado loan).</citySavings>
     <cardnumber>4162982000012592</cardnumber>
-    <verifiedBy></verifiedBy>
-    <issuedBy></issuedBy>
-    <saNumber></saNumber>
+    <verifiedBy>srmnarvadez@unionbankph.com</verifiedBy>
+    <issuedBy>srmnarvadez@unionbankph.com</issuedBy>
+    <saNumber>109830014639</saNumber>
     <branch>DILIMAN BRANCH</branch>
     <new>[X]</new>
     <replace>[ ]</replace>
+</project> -->
+
+<!-- <?xml version="1.0" encoding="UTF-8" ?>
+<project>
+    <accountNumber>109830014639</accountNumber>
+    <branch>DILIMAN BRANCH</branch>
+    <cardNumber>4162982000012592</cardNumber>
+    <cardStatus />
+    <cif />
+    <docReferenceId>e8d6114b-a624-4f3a-8709-5536b79ab43a</docReferenceId>
+    <docType>SSS_FingerprintAR</docType>
+    <emailAddress>blmbaniqued@unionbankph.com</emailAddress>
+    <firstName>antoÑio ryan</firstName>
+    <issuedBy>srmnarvadez@unionbankph.com</issuedBy>
+    <lastName>santo niÑo sr</lastName>
+    <middleName>brioÑes</middleName>
+    <solId />
+    <verifiedBy>srmnarvadez@unionbankph.com</verifiedBy>
+    <withCitySavings>true</withCitySavings>
+    <withGetGo>true</withGetGo>
+</project> -->
+
+
+<!-- <?xml version="1.0" encoding="UTF-8" ?>
+<project>
+    <accountNumber>109830014639</accountNumber>
+    <branch>DILIMAN BRANCH</branch>
+    <cardNumber>4162982000012592</cardNumber>
+    <citySavings>I consent to the disclosure by UnionBank of my Personal Data to CitySavings Bank for its product and service offerings (i.e. promotional loan and pensionado loan).</citySavings>
+    <firstName>ANTOÑIO RYAN</firstName>
+    <isNew>[X]</isNew>
+    <isReplace>[ ]</isReplace>
+    <issuedBy>srmnarvadez@unionbankph.com</issuedBy>
+    <lastName>SANTO NIÑO SR</lastName>
+    <middleName>BRIOÑES</middleName>
+    <verifiedBy>srmnarvadez@unionbankph.com</verifiedBy>
+</project> -->
+
+
+<?xml version="1.0" encoding="UTF-8" ?>
+<project>
+    <accountNumber>109830014639</accountNumber>
+    <branch>DILIMAN BRANCH</branch>
+    <cardNumber>4162982000012592</cardNumber>
+    <citySavings>I consent to the disclosure by UnionBank of my Personal Data to CitySavings Bank for its product and service offerings (i.e. promotional loan and pensionado loan).</citySavings>
+    <firstName>ANTOÑIO RYAN</firstName>
+    <ggDebit null="true" />
+    <isNew>[X]</isNew>
+    <isReplace>[ ]</isReplace>
+    <issuedBy>srmnarvadez@unionbankph.com</issuedBy>
+    <lastName>SANTO NIÑO SR</lastName>
+    <middleName>BRIOÑES</middleName>
+    <verifiedBy>srmnarvadez@unionbankph.com</verifiedBy>
 </project>

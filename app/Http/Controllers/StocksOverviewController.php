@@ -29,7 +29,7 @@ class StocksOverviewController extends Controller
             $nestedData[] = $vendor['unit_code'];
 			$nestedData[] = $vendor['qty'];
             $itemno = $vendor['id'];
-            $nestedData[] = PriceController::getPrice($itemno)->price;
+            $nestedData[] = "₱ " . PriceController::getPrice($itemno)->price;
 
 			
 

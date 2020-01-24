@@ -1,7 +1,7 @@
 @extends('main.layout',['current_user'=>$current_user])
 
 @section('sidebar_menu')
-    @switch($current_user['accessLevelCode'])
+    @switch(Session::get('loggedInUserAccessLevelCode'))
         @case('ADMIN')
             {{view('sidebars.adminsidebar')}}
             @break

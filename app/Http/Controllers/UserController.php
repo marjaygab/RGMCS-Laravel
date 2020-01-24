@@ -9,11 +9,11 @@ use Illuminate\Support\Facades\Redirect;
 class UserController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {   
 
-        if (session()->has('current_user')) {
-            return back()->with(['current_user'=>session("current_user")]);    
+        if (session()->has('loggedInUser')) {
+            return redirect('/dashboard')->with(['current_user'=>session("current_user")]);    
         } else {
             return view('login');
         }
@@ -36,7 +36,14 @@ class UserController extends Controller
                         'id'=>$users->id
                     ];
 
+
                     session()->put('current_user',$current_user);
+                    
+                    session()->put('loggedInUserId',$current_user['id']);
+                    session()->put('loggedInUserName',$current_user['username']);
+                    session()->put('loggedInUserAccessLevelId',$current_user['accessLevelId']);
+                    session()->put('loggedInUserAccessLevelCode',$current_user['accessLevelCode']);
+
                     // $request->session()->put("current_user",$current_user);
                     return redirect('/dashboard')->with('current_user',$current_user);
                     // return var_dump(session('current_user'));
@@ -50,10 +57,12 @@ class UserController extends Controller
 
     public function logoutUser(Request $request)
     {
-        if (session('current_user') != null) {
-            session('current_user',null);
-            $request->session()->forget('current_user');
-        }
+        session()->forget('current_user');
+        session()->forget('loggedInUserId');
+        session()->forget('loggedInUserName');
+        session()->forget('loggedInUserAccessLevelId');
+        session()->forget('loggedInUserAccessLevelCode');
+        session()->flush();
         return redirect('/');
     }
     
