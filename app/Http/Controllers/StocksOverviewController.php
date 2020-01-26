@@ -89,9 +89,9 @@ class StocksOverviewController extends Controller
 			$nestedData[] = $warehouseQty;
 
 			$price = PriceController::getPrice($itemno);
-			
+
 			if ($price == false || $price == null) {
-				$price = "N/A";	
+				$price = "N/A";		
 			}else{
 				$price = "₱ " . PriceController::getPrice($itemno)->price;
 			}
