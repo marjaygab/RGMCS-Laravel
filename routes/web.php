@@ -55,11 +55,14 @@ Route::get('/cart/remove/{cartid}','CartController@removeCartItem')->name('remov
 Route::post('/cart/add','CartController@addToCart')->name('addtocart');
 
 Route::get('/transaction/view','TransactionsController@viewTransactions')->name('viewtransactions');
+Route::get('/transaction/adminview','TransactionsController@adminViewTransactions')->name('adminviewtransactions');
+Route::get('/transaction/adminview/{selection}','TransactionsController@adminViewTransactions')->name('adminviewtransactionsselection');
 Route::get('/transaction/view/{itemno}','TransactionsController@viewTransactions')->name('viewitemtransactions');
 Route::get('/transaction/processcart','TransactionsController@processCart')->name('processcart');
 
 
 Route::get('/stocks','StockController@index')->name('stocks');
+Route::get('/stocks/admin','StockController@adminIndex')->name('adminstocks');
 
 
 
@@ -76,8 +79,11 @@ Route::post('/fetchitembin','ItemBinController@getAll')->name('fetchitembin');
 Route::post('/fetchitemoverview','ItemOverviewController@getAll')->name('fetchitemoverview');
 Route::post('/fetchcartitems','CartOverviewController@getAll')->name('fetchcartitems');
 Route::post('/fetchstocks','StocksOverviewController@getAll')->name('fetchstocks');
+Route::post('/fetchadminstocks','StocksOverviewController@admingetAll')->name('fetchadminstocks');
 
 Route::post('/fetchtransactions','TransactionsOverviewController@getAll')->name('fetchtransactions');
+Route::post('/fetchadmintransactions','TransactionsOverviewController@getAdminTransactions')->name('fetchadmintransactions');
+Route::post('/fetchadmintransactions/{itemno}','TransactionsOverviewController@getAdminTransactions')->name('fetchadminitemtransactions');
 Route::post('/fetchtransactions/{itemno}','TransactionsOverviewController@getAll')->name('fetchitemtransactions');
 
 

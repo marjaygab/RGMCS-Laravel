@@ -2,10 +2,9 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCartOverviewView extends Migration
+class AlterStocksOverviewView extends Migration
 {
     /**
      * Run the migrations.
@@ -14,12 +13,11 @@ class CreateCartOverviewView extends Migration
      */
     public function up()
     {
-        DB::statement("CREATE OR REPLACE VIEW cart_overview_view AS
-        SELECT c.id,c.transaction_type,c.name,c.itemno,r.itemdesc,c.vendor,c.unit_cost,c.qtyin,c.qtyout,c.tdate,c.created_at
-        FROM rgmcs_renes_encoder_db.cart AS c
+        //
+        DB::statement("CREATE OR REPLACE VIEW stocks_overview_view AS SELECT s.id,s.itemno,r.itemdesc,r.unit_code,r.type,s.qty
+        FROM rgmcs_redor_encoder_db.stocks AS s   
         INNER JOIN rgmcs_references_db.item_list_view AS r
-        ON c.itemno = r.id");
-       
+        ON s.itemno = r.id;");
     }
 
     /**
@@ -29,6 +27,6 @@ class CreateCartOverviewView extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('cart_overview_view');
+        Schema::dropIfExists('stocks_overview_view');
     }
 }

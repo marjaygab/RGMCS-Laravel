@@ -84,9 +84,15 @@ class CartController extends Controller
 
     public static function insertCartItem($transactionType,$itemNo,$vendor,$unit_cost,$qtyIn,$qtyOut,$tDate)
     {
+        if (session()->has('loggedInUserName')) {
+            $name = session()->get('loggedInUserName');
+        } else {
+            $name = env('DEVICE_CODE');
+        }
+        
         $parameters = [
             'transaction_type'=>$transactionType,
-            'name'=>'Alma',
+            'name'=>$name,
             'itemno'=>$itemNo,
             'vendor'=>$vendor,
             'unit_cost'=>$unit_cost,

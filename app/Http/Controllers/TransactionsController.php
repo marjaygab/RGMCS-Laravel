@@ -20,6 +20,23 @@ class TransactionsController extends Controller
         return view('encodetransactions')->with($toPass);
     }
 
+    public function adminViewTransactions(Request $request)
+    {
+        $selection = $request->route('selection');
+        $defaultSelection = DeviceController::getDefaultSelection();
+
+        if ($selection != null) {
+            $selectionObject = DeviceController::getDevices(['deviceCode'=>$selection],true);
+            if ($selectionObject != false) {
+                return view('admintransactions')->with('selection',$selectionObject);
+            }else{
+                return view('admintransactions')->with('selection',$defaultSelection)->withErrors(['msg'=>"Device does not exist."]);
+            }
+        }else{
+            return view('admintransactions')->with('selection',$defaultSelection);
+        }
+    }
+
     public function viewTransactions(Request $request)
     {
         return view('viewtransactions');

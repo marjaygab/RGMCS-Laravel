@@ -13,6 +13,11 @@ class StockController extends Controller
         return view('stocks');
     }
 
+    public function adminIndex(Request $request)
+    {
+        return view('adminstocks');
+    }
+
     public static function setQty($itemno,$qtyin,$qtyout)
     {
         $stock = self::getStock($itemno,true);
@@ -30,7 +35,7 @@ class StockController extends Controller
         }
     }
 
-    public static function getStock($itemno = null,$first = null)
+    public static function getStock($itemno = null,$first = null,$environment = null)
     {
         
         if ($itemno == null) {
@@ -39,7 +44,11 @@ class StockController extends Controller
             $parameters = ['itemno'=>$itemno];
         }
 
-        $result = RGMCSFactory::fetchRows(new Stock(),env("DB_CONFIG_" . env('DEVICE_CODE') . "_DB"),$parameters,$first);
+        if ($environment == null) {
+            $environment = env("DB_CONFIG_" . env('DEVICE_CODE') . "_DB");
+        }
+
+        $result = RGMCSFactory::fetchRows(new Stock(),$environment,$parameters,$first);
 
         if ($result != null) {
             return $result;

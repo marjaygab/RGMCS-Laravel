@@ -16,7 +16,7 @@ class CreateTransactionOverviewView extends Migration
     {
        DB::statement("CREATE OR REPLACE VIEW transactions_overview_view AS
        SELECT t.id,t.transaction_type,t.name,t.itemno,r.itemdesc,t.vendor,t.unit_cost,t.qtyin,t.qtyout,t.qtyoh,t.tdate,t.created_at
-       FROM rgmcs_renes_cashier_db.transactions AS t   
+       FROM rgmcs_renes_encoder_db.transactions AS t   
        INNER JOIN rgmcs_references_db.item_list_view AS r
        ON t.itemno = r.id");
     }

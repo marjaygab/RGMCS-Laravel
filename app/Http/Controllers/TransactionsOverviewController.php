@@ -78,6 +78,95 @@ class TransactionsOverviewController extends Controller
 		}
 		return DataTablesController::generateJson(intval($request->post('draw')), intval($result['total']), intval($result['totalFiltered']), $data);
     }
+
+    public function getAdminTransactions(Request $request)
+	{
+		$transactions = new TransactionsOverview();
+
+        $itemno = $request->route('itemno');
+        
+        $selection = $request->post('selection');
+
+        switch ($selection) {
+            case 'RENES_ENCODER':
+            case 'REDOR_ENCODER':
+            case 'WAREHOUSE_ENCODER':    
+                $environment = env("DB_CONFIG_" . $selection);    
+            break;
+
+            case 'RENES_CASHIER':    
+            default:
+                $defaultSelection = DeviceController::getDefaultSelection();
+                $environment = env("DB_CONFIG_" . $defaultSelection->deviceCode);    
+                break;
+        }
+
+
+        if ($itemno != null) {
+            $result = DataTablesController::generateResult(
+                $request,
+                $transactions,
+                $environment,
+                [
+                    'itemno',
+                    'transaction_type',
+                    'name', 
+                    'itemdesc', 
+                    'vendor',
+                    'unit_cost', 
+                    'qtyin',
+                    'qtyout', 
+                    'qtyoh', 
+                    'tdate',
+                    'created_at',
+                ],
+                'itemdesc',
+                ['itemno','=',$itemno]
+            );
+        }else{
+            $result = DataTablesController::generateResult(
+                $request,
+                $transactions,
+                $environment,
+                [
+                    'itemno',
+                    'transaction_type',
+                    'name', 
+                    'itemdesc', 
+                    'vendor',
+                    'unit_cost', 
+                    'qtyin',
+                    'qtyout', 
+                    'qtyoh', 
+                    'tdate',
+                    'created_at',
+                ],
+                'itemdesc'
+            );
+        }
+
+
+		
+
+		$data = array();
+		foreach ($result['result'] as $key => $transaction) {
+			$nestedData = array();
+			$nestedData[] = $transaction['itemno'];
+            $nestedData[] = $transaction['transaction_type'];
+            $nestedData[] = $transaction['name'];
+            $nestedData[] = $transaction['itemdesc'];
+            $nestedData[] = $transaction['vendor'];
+            $nestedData[] = "₱ " . $transaction['unit_cost'];
+            $nestedData[] = $transaction['qtyin'];
+            $nestedData[] = $transaction['qtyout'];
+            $nestedData[] = $transaction['qtyoh'];
+            $nestedData[] = $transaction['tdate'];
+            $nestedData[] = date_format($transaction['created_at'],"Y/m/d h:i A");
+
+			$data[] = $nestedData;
+		}
+		return DataTablesController::generateJson(intval($request->post('draw')), intval($result['total']), intval($result['totalFiltered']), $data);
+    }
     
 
 }

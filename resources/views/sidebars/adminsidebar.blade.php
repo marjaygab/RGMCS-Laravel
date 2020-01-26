@@ -44,13 +44,13 @@
     </li>
     
     <li class="nav-item">
-        <a class="nav-link" href="charts.html">
+        <a class="nav-link"  href="{{route('adminviewtransactions')}}">
             <i class="fas fa-fw fa-money-bill-alt"></i>
             <span>Transactions</span></a>
     </li>
     
     <li class="nav-item">
-        <a class="nav-link" href="charts.html">
+        <a class="nav-link" href="{{route('adminstocks')}}">
             <i class="fas fa-fw fa-boxes"></i>
             <span>Stocks</span></a>
         </li>

@@ -24,14 +24,14 @@ class DataTablesController extends Controller
 
             if ($additionalParam != null) {
                 $result = $model
-                ->where($whereParam,'like',$searchValue . '%')
+                ->where($whereParam,'like','%' . $searchValue . '%')
                 ->orWhere($additionalParam)
                 ->orderBy($columns[$request->post("order")[0]['column']],$request->post("order")[0]['dir'])->get();
                 
                 $totalFiltered = $result->count();
 
                 $result = $model
-                ->where($whereParam,'like',$searchValue . '%')
+                ->where($whereParam,'like','%' . $searchValue . '%')
                 ->orWhere($additionalParam)
                 ->orderBy($columns[$request->post("order")[0]['column']],$request->post("order")[0]['dir'])
                 ->offset($request->post("start"))
@@ -39,13 +39,13 @@ class DataTablesController extends Controller
                 ->get();
             }else{
                 $result = $model
-                ->where($whereParam,'like',$searchValue . '%')
+                ->where($whereParam,'like','%' .$searchValue . '%')
                 ->orderBy($columns[$request->post("order")[0]['column']],$request->post("order")[0]['dir'])->get();
                 
                 $totalFiltered = $result->count();
     
                 $result = $model
-                ->where($whereParam,'like',$searchValue . '%')
+                ->where($whereParam,'like','%' . $searchValue . '%')
                 ->orderBy($columns[$request->post("order")[0]['column']],$request->post("order")[0]['dir'])
                 ->offset($request->post("start"))
                 ->limit($request->post("length"))
@@ -123,13 +123,14 @@ class DataTablesController extends Controller
         // return json_encode($json_data);
     }
 
-    public static function generateJson($draw,$recordsTotal,$recordsFiltered,$data)
+    public static function generateJson($draw,$recordsTotal,$recordsFiltered,$data,$additionaldata = null)
     {
         $json_data = array(
             "draw"            => intval( $draw),   // for every request/draw by clientside , they send a number as a parameter, when they recieve a response/data they first check the draw number, so we are sending same number in draw. 
             "recordsTotal"    => intval( $recordsTotal ),  // total number of records
             "recordsFiltered" => intval( $recordsFiltered ), // total number of records after searching, if there is no searching then totalFiltered = totalData
-            "data"            => $data   // total data array
+            "data"            => $data,   // total data array
+            "additionaldata" => $additionaldata
         );
 
         return json_encode($json_data);

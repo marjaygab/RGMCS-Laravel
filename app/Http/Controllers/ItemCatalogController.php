@@ -123,6 +123,19 @@ class ItemCatalogController extends Controller
         DB::disconnect();
     }
 
+    public static function getAllItem()
+    {
+        $itemCatalog = new  ItemCatalog();
+        $itemCatalog->setConnection(env('DB_CONFIG_REFERENCES'));
+        $item = $itemCatalog->all();
+        if ($item != null) {
+            return $item;
+        }else{
+            return false;
+        }
+        DB::disconnect();
+    }
+
     public static function setItem($itemno,$parameters)
     {
         $itemCatalog = new ItemCatalog();
