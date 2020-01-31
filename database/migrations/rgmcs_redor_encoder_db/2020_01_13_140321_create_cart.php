@@ -23,7 +23,7 @@ class CreateCart extends Migration
             $table->integer('qtyin');
             $table->integer('qtyout');
             $table->date('tdate');
-            $table->dateTime('created_at');
+            $table->dateTime('created_at')->useCurrent();
         });
     }
 

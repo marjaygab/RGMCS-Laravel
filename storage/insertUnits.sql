@@ -103,6 +103,10 @@ INNER JOIN rgmcs_references_db.item_list_view AS r
 ON s.itemno = r.id;
 
 
+SELECT r.id,r.vendor,r.tdate,i.itemno,i.itemdesc,i.baseprice,i.d1,i.d2,i.d3,i.d4,r.netprice,r.created_at FROM notebook_receipt AS r
+INNER JOIN notebook_receipt_items AS i
+ON i.receipt_id = r.id
+
 
 
 

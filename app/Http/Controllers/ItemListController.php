@@ -41,8 +41,8 @@ class ItemListController extends Controller
           $markRoute = route('markitem',['markitemno'=>$id]);
           $csrf = csrf_token();
 
-            $markAction = "<form action='$markRoute' method='POST'>
-            <input class='btn btn-danger btn-sm mt-2' type='submit' value='Mark Item'>
+            $markAction = "<form action='$markRoute' method='POST' class='d-inline'>
+            <input class='btn btn-danger btn-sm' type='submit' value='Mark Item'>
             <input type='hidden' name='_token' value='$csrf'>
             </form>";
 

@@ -17,7 +17,7 @@ class ItemOverviewController extends Controller
 			$request,
 			$itemOverview,
 			env("DB_CONFIG_" . env('DEVICE_CODE') . "_DB"),
-			['itemno', 'itemdesc', 'unit_code', 'qty', 'action'],
+			['id', 'itemdesc', 'unit_code', 'qty', 'action'],
 			'itemdesc'
 		);
 

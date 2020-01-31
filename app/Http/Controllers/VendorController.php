@@ -123,15 +123,15 @@ class VendorController extends Controller
         if ($vid == null) {
             $string = "<option value ='0' disabled selected>--Select Unit--</option>";
             foreach ($data as $key => $value) {
-                $string .= "<option value = '$value->vid'>$value->vendor</option>";
+                $string .= "<option value = '$value->id'>$value->vendor</option>";
             }
         } else {
             $string = "<option value ='0' disabled>--Select Unit--</option>";
             foreach ($data as $key => $value) {
                 if ($value->id == $vid) {
-                    $string .= "<option value = '$value->vid' selected>$value->vendor</option>";
+                    $string .= "<option value = '$value->id' selected>$value->vendor</option>";
                 } else{
-                    $string .= "<option value = '$value->vid'>$value->vendor</option>";
+                    $string .= "<option value = '$value->id'>$value->vendor</option>";
                 }
             }
         }
@@ -171,8 +171,8 @@ class VendorController extends Controller
 
             $csrf = csrf_token();
 
-            $markAction = "<form action='$markRoute' method='POST'>
-            <input class='btn btn-danger btn-sm mt-2' type='submit' value='Mark Vendor'>
+            $markAction = "<form action='$markRoute' method='POST' class='d-inline'>
+            <input class='btn btn-danger btn-sm' type='submit' value='Mark Vendor'>
             <input type='hidden' name='_token' value='$csrf'>
             </form>";
             $nestedData[] = $editAction . $markAction;

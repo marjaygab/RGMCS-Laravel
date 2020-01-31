@@ -1,6 +1,7 @@
+<?php use \App\Http\Controllers\DatabaseHistoryController; ?>
 <?php use \App\Http\Controllers\CartController; ?>
 <!-- Sidebar -->
-<ul class="navbar-nav bg-gradient-danger sidebar sidebar-dark accordion" id="accordionSidebar">
+<ul class="navbar-nav bg-gradient-danger sidebar sidebar-dark accordion toggled" id="accordionSidebar">
     
     <!-- Sidebar - Brand -->
     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
@@ -73,14 +74,18 @@
             </a>
             <div id="updateLocalMenu" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
-                    <a class="collapse-item" href="login.html">From Warehouse Encoder</a>
-                    </div>
+                    <a class="collapse-item" href="login.html">From References<div><small class="text-danger d-inline-block">{{DatabaseHistoryController::generateHistoryString('REFERENCES')}}</small></div></a>
+                    
+                    @if (env('DEVICE_CODE') != "WAREHOUSE_ENCODER")
+                        <a class="collapse-item" href="login.html">From Warehouse Encoder <div><small class="text-danger d-inline-block">{{DatabaseHistoryController::generateHistoryString('WAREHOUSE_ENCODER')}}</small></div></a>
+                    @endif
+                    {{-- <a class="collapse-item" href="login.html">From Warehouse Encoder</a> --}}
                 </div>
             </li>
             
             <!-- Nav Item - Charts -->
             <li class="nav-item">
-                <a class="nav-link" href="charts.html">
+                <a class="nav-link" href="{{route('backup')}}">
                     <i class="fas fa-fw fa-upload"></i>
                     <span>Backup Local Data</span></a>
                 </li>

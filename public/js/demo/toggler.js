@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    var costColumn = document.getElementById("costColumn");
+    var costColumn = document.getElementById("cost");
     var costColumnContent = document.getElementsByClassName("costColumnContent");
     var toggleButton = document.getElementById("toggleButton");
     var toggleState = true;

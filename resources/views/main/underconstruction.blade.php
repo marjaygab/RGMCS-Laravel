@@ -1,3 +1,13 @@
+
+@if ($errors->any())
+<div class="row">
+    <div class="col-sm-12">
+        <div class="alert alert-danger" role="alert">
+            <strong>Oh no!</strong> {{$errors->first()}}
+        </div>
+    </div>
+</div>
+@endif
 <div class="row">
     <div class="col-sm-4"></div>
     <div class="col-sm-4">

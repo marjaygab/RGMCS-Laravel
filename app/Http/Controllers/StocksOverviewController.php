@@ -25,11 +25,21 @@ class StocksOverviewController extends Controller
 		$data = array();
 		foreach ($result['result'] as $key => $vendor) {
 			$nestedData = array();
-			$nestedData[] = $vendor['itemno'];
+			$itemno = $vendor['itemno'];
+			$nestedData[] = $itemno;
 			$nestedData[] = $vendor['itemdesc'];
-            $nestedData[] = $vendor['unit_code'];
+			$nestedData[] = $vendor['unit_code'];
 			$nestedData[] = $vendor['qty'];
-            $itemno = $vendor['itemno'];
+			if (env('DEVICE_CODE') != "WAREHOUSE_ENCODER") {
+				$warehouseQty = StockController::getStock($itemno,true,env('DB_CONFIG_WAREHOUSE_ENCODER'));
+				if ($warehouseQty != false) {
+					# code...
+					$nestedData[] = $warehouseQty->qty;
+				}else{
+					$nestedData[] = "N/A";
+				}
+			}
+            
             $nestedData[] = "₱ " . PriceController::getPrice($itemno)->price;
 
 			
@@ -98,7 +108,7 @@ class StocksOverviewController extends Controller
 
             $nestedData[] = $price;
             
-            $viewroute = route('viewitemtransactions', ['itemno' => $itemno]);
+            $viewroute = route('adminviewitemtransactions', ['itemno' => $itemno]);
 
             $viewAction = "<a href='$viewroute' class='btn btn-info btn-icon-split btn-sm ml-4'>
             <span class='icon text-white-50'>

@@ -34,6 +34,29 @@ class ItemCatalogController extends Controller
         return view('addedititem',$toPass);
     }
 
+
+    public static function generateOptionString($itemno=null){
+
+        $items = self::getItems($itemno);
+        if ($itemno == null) {
+            $string = "<option value ='0' disabled selected>--Select Item--</option>";
+            foreach ($items as $key => $value) {
+                $string .= "<option value = '$value->id'>$value->itemdesc</option>";
+            }
+        } else {
+            $string = "<option value ='0' disabled>--Select Unit--</option>";
+            foreach ($items as $key => $value) {
+                if ($value->id == $itemno) {
+                    $string .= "<option value = '$value->id' selected>$value->itemdesc</option>";
+                } else{
+                    $string .= "<option value = '$value->id'>$value->itemdesc</option>";
+                }
+            }
+        }
+        return $string;
+    }
+
+
     public function updateItem(Request $request)
     {
         $itemno = $request->route('edititemno');
@@ -97,7 +120,7 @@ class ItemCatalogController extends Controller
           $csrf = csrf_token();
 
             $markAction = "<form action='$markRoute' method='POST'>
-            <input class='btn btn-danger btn-sm mt-2' type='submit' value='Mark Item'>
+            <input class='btn btn-danger btn-sm mt-2 d-inline' type='submit' value='Mark Item'>
             <input type='hidden' name='_token' value='$csrf'>
             </form>";
 
@@ -121,6 +144,23 @@ class ItemCatalogController extends Controller
             return false;
         }
         DB::disconnect();
+    }
+
+    public static function getItems($itemno = null,$first = false)
+    {
+        if ($itemno != null) {
+            $params = ['id'=>$itemno];
+        }else{
+            $params = null;
+        }
+
+        $result = RGMCSFactory::fetchRows(new ItemCatalog(),env('DB_CONFIG_REFERENCES'),$params,$first);
+
+        if ($result != null) {
+            return $result;
+        }else{
+            return false;
+        }
     }
 
     public static function getAllItem()

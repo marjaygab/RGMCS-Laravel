@@ -13,6 +13,7 @@
 
 use App\Http\Controllers\ItemTypeController;
 use App\Http\Controllers\UnitController;
+use App\Http\Controllers\UpdateLocalDatabaseController;
 
 Route::get('/','UserController@index')->name('root');
 
@@ -56,13 +57,30 @@ Route::post('/cart/add','CartController@addToCart')->name('addtocart');
 
 Route::get('/transaction/view','TransactionsController@viewTransactions')->name('viewtransactions');
 Route::get('/transaction/adminview','TransactionsController@adminViewTransactions')->name('adminviewtransactions');
-Route::get('/transaction/adminview/{selection}','TransactionsController@adminViewTransactions')->name('adminviewtransactionsselection');
+Route::get('/transaction/adminview/{itemno}','TransactionsController@adminViewTransactions')->name('adminviewitemtransactions');
 Route::get('/transaction/view/{itemno}','TransactionsController@viewTransactions')->name('viewitemtransactions');
 Route::get('/transaction/processcart','TransactionsController@processCart')->name('processcart');
 
 
 Route::get('/stocks','StockController@index')->name('stocks');
 Route::get('/stocks/admin','StockController@adminIndex')->name('adminstocks');
+
+Route::get('/backup','BackupDatabaseController@index')->name('backup');
+Route::get('/backup/start','BackupDatabaseController@backupDatabase')->name('dobackup');
+Route::get('/backup/details','BackupDatabaseController@backupDetails')->name('backupdetails');
+
+Route::get('/notebook','NotebookController@index')->name('notebook');
+Route::post('/notebook/new','NotebookController@newTransaction')->name('new-notebook');
+
+
+
+
+Route::get('/updatelocal/{deviceCode}',
+    function($deviceCode)
+    {
+        return UpdateLocalDatabaseController::updateLocal($deviceCode);        
+    }
+)->name('updatelocal');
 
 
 

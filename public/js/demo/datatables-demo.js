@@ -6,7 +6,36 @@ $(document).ready(function () {
 
 	var defaultSelection = "RENES_ENCODER";
 
-	
+	var deviceCode = $('#deviceCode').html();
+
+	var stocksColumnDefs;
+
+	var stocksColumnDefsDefault = [
+		{"width": "30%", "targets": [1,6]},
+		{"className": "text-center", "targets": [0,1,2,3,4,5,6]},
+		{"orderable":false,"targets":[4,5,6]},
+		{ "width": "10%", "targets": [3,4,6] }
+	];
+
+	var stocksColumnDefsWarehouse = [
+		{"width": "30%", "targets": [1,5]},
+		{"className": "text-center", "targets": [0,1,2,3,4,5]},
+		{"orderable":false,"targets":[4,5]},
+		{ "width": "10%", "targets": [3,4,5] }
+	];
+
+	if (deviceCode == "WAREHOUSE_ENCODER") {
+		stocksColumnDefs = stocksColumnDefsWarehouse;
+	}else{
+		stocksColumnDefs = stocksColumnDefsDefault;
+	}
+
+
+	if (parsePath("/RGMCS-Laravel/public/","") == "/notebook") {
+		$('#receiptItemsTable').DataTable();
+	}
+
+
 	function parsePath(originalTransactionsPath,desiredPath) {
 		var currentPath = window.location.pathname;
 		toPath = desiredPath;
@@ -32,6 +61,10 @@ $(document).ready(function () {
 		"processing": true,
 		"order": [1, 'asc'],
 		"serverSide": true,
+		"columnDefs": [
+			{"className":"text-center","targets":[0,1,2,3]},
+			{"orderable":false,"targets":[3]}
+		],
 		"ajax": {
 			url: (base_url + "/fetchitems"),
 			type: "post",
@@ -64,6 +97,10 @@ $(document).ready(function () {
 		"processing": true,
 		"order": [1, 'asc'],
 		"serverSide": true,
+		"columnDefs": [
+			{"className":"text-center","targets":[0,1,2,3,4]},
+			{"orderable":false,"targets":[4]}
+		],
 		"ajax": {
 			url: (base_url + "/fetchvendors"),
 			type: "post",
@@ -95,6 +132,10 @@ $(document).ready(function () {
 		"processing": true,
 		"order": [1, 'asc'],
 		"serverSide": true,
+		"columnDefs": [
+			{"className":"text-center","targets":[0,1,2,3,4]},
+			{"orderable":false,"targets":[4]}
+		],
 		"ajax": {
 			url: (base_url + "/fetchitemoverview"),
 			type: "post",
@@ -157,10 +198,7 @@ $(document).ready(function () {
 		"processing": true,
 		"order": [1, 'asc'],
 		"serverSide": true,
-		"columnDefs": [
-			{"width": "30%","className":"text-center", "targets": 1},
-			{ "width": "10%", "targets": [3,4] }
-		],
+		"columnDefs": stocksColumnDefs,
 		"ajax": {
 			url: (base_url + "/fetchstocks"),
 			type: "post",
@@ -232,7 +270,8 @@ $(document).ready(function () {
 		"order": [[10, 'desc']],
 		"serverSide": true,
 		"columnDefs": [
-			{ className: "costColumnContent", "targets": [5] }
+			{ className: "costColumnContent", "targets": [5] },
+			{"className": "text-center", "targets": [0,1,2,3,4,5,6,7,8,9,10]},
 		],
 		"ajax": {
 			url: (base_url + parsePath("/RGMCS-Laravel/public/transaction/view/","/fetchtransactions")),

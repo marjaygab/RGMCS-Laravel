@@ -1,5 +1,6 @@
+<?php use \App\Http\Controllers\DatabaseHistoryController; ?>
 <!-- Sidebar -->
-<ul class="navbar-nav bg-gradient-danger sidebar sidebar-dark accordion" id="accordionSidebar">
+<ul class="navbar-nav bg-gradient-danger sidebar sidebar-dark accordion toggled" id="accordionSidebar">
     
     <!-- Sidebar - Brand -->
     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
@@ -30,7 +31,7 @@
         <!-- Nav Item - Pages Collapse Menu -->
         <li class="nav-item">
             <a class="nav-link" href="{{route('items')}}">
-                <i class="fas fa-fw fa-store"></i>
+                <i class="fas fa-fw fa-hammer"></i>
                 <span>Item Manager</span>
             </a>
         </li>
@@ -55,11 +56,26 @@
             <span>Stocks</span></a>
         </li>
         
+
         <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#noteBookMenu"
+            aria-expanded="true" aria-controls="collapsePages">
+            <i class="fas fa-fw fa-book"></i>
+            <span>Notebook</span>
+        </a>
+        {{-- <li class="nav-item">
             <a class="nav-link" href="charts.html">
                 <i class="fas fa-fw fa-book"></i>
                 <span>Notebook</span></a>
-            </li>
+        </li> --}}
+        <div id="noteBookMenu" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Notebook</h6>
+                <a class="collapse-item" href="{{route('notebook')}}">Encode Notebook Entries</a>
+                <a class="collapse-item" href="#">View Notebook</a>
+            </div>
+        </div>
+                
             
             
             <!-- Divider -->
@@ -78,11 +94,11 @@
                 <span>Update Local</span>
             </a>
             <div id="updateLocalMenu" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <a class="collapse-item" href="login.html">From Warehouse Encoder</a>
-                    <a class="collapse-item" href="login.html">From Redor Encoder</a>
-                    <a class="collapse-item" href="login.html">From Rene's Encoder</a>
-                    <a class="collapse-item" href="login.html">From Rene's Cashier</a>
+                <div class="bg-white py-1 collapse-inner rounded">
+                    {{-- <a class="collapse-item" href="login.html">From References<div><small class="text-danger d-inline-block">{{DatabaseHistoryController::generateHistoryString('REFERENCES')}}</small></div></a> --}}
+                    <a class="collapse-item" href="{{route('updatelocal',['deviceCode'=>"WAREHOUSE_ENCODER"])}}">From Warehouse Encoder <div><small class="text-danger d-inline-block">{{DatabaseHistoryController::generateHistoryString('WAREHOUSE_ENCODER')}}</small></div></a>
+                    <a class="collapse-item" href="{{route('updatelocal',['deviceCode'=>"REDOR_ENCODER"])}}">From Redor Encoder <div><small class="text-danger d-inline-block">{{DatabaseHistoryController::generateHistoryString('REDOR_ENCODER')}}</small></div></a>
+                    <a class="collapse-item" href="{{route('updatelocal',['deviceCode'=>"RENES_ENCODER"])}}">From Rene's Encoder <div><small class="text-danger d-inline-block">{{DatabaseHistoryController::generateHistoryString('RENES_ENCODER')}}</small></div></a>
                     <!-- <h6 class="collapse-header">Login Screens:</h6>
                         <a class="collapse-item" href="login.html">Login</a>
                         <a class="collapse-item" href="register.html">Register</a>
@@ -97,7 +113,7 @@
             
             <!-- Nav Item - Charts -->
             <li class="nav-item">
-                <a class="nav-link" href="charts.html">
+                <a class="nav-link" href={{route('backup')}}>
                     <i class="fas fa-fw fa-upload"></i>
                     <span>Backup Local Data</span></a>
                 </li>

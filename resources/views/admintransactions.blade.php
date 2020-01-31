@@ -50,7 +50,7 @@
                                             <th>Encoder</th>
                                             <th>Description</th>
                                             <th>Vendor</th>
-                                            <th id="costColumn">Unit Cost</th>
+                                            <th id="cost">Unit Cost</th>
                                             <th>QTY IN</th>
                                             <th>QTY OUT</th>
                                             <th>QTY OH</th>

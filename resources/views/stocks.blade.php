@@ -32,6 +32,9 @@
                                     <th>Description</th>
                                     <th>Unit</th>
                                     <th>Stocks On Hand</th>
+                                    @if (env('DEVICE_CODE') != "WAREHOUSE_ENCODER")
+                                        <th>Warehouse Stocks</th>
+                                    @endif
                                     <th>Unit Cost</th>
                                     <th>Action</th>
                                 </tr>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 
 class RGMCSFactory extends Controller
@@ -18,6 +19,15 @@ class RGMCSFactory extends Controller
     public static function insertRows($model,$dbConfig,$parameters)
     {
         $result = self::connectDB($model,$dbConfig)->insert($parameters);
+
+        DB::disconnect();
+        return $result;
+    }
+
+    public static function insertRowsId($model,$dbConfig,$parameters)
+    {
+        $result = self::connectDB($model,$dbConfig)->insertGetId($parameters);
+
         DB::disconnect();
         return $result;
     }
@@ -107,6 +117,11 @@ class RGMCSFactory extends Controller
     {
         self::truncateRows($model,$environment);
         return back();
+    }
+
+    public static function random($length = null)
+    {
+        return strtoupper(Str::random($length));
     }
 
 }
