@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ReceipItemsOverview extends Model
+class ReceiptItemsOverview extends Model
 {
     //
     protected $table = "notebook_receipt_items_overview";

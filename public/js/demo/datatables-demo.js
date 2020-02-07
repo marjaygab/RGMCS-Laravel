@@ -8,7 +8,11 @@ $(document).ready(function () {
 
 	var deviceCode = $('#deviceCode').html();
 
+	var selectedReceipt;
 	var stocksColumnDefs;
+	var fromDate;
+	var toDate;
+
 
 	var stocksColumnDefsDefault = [
 		{"width": "30%", "targets": [1,6]},
@@ -223,7 +227,9 @@ $(document).ready(function () {
 		}
 	});
 
-	$('#adminstocksOverviewTable').DataTable({
+	var adminstocksOverviewTable;
+
+	adminstocksOverviewTable = $('#adminstocksOverviewTable').DataTable({
 		"lengthMenu": [10, 25, 50, 75, 100],
 		"pageLength": 10,
 		"responsive": true,
@@ -240,6 +246,11 @@ $(document).ready(function () {
 			type: "post",
 			headers: {
 				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			},
+			dataSrc:function (json) {
+				console.log(json);
+				
+				return json.data;
 			}
 		}, 
 		"initComplete": function () {
@@ -258,6 +269,7 @@ $(document).ready(function () {
 					})
 			$('.dataTables_filter').append($searchButton, $clearButton);
 		}
+	}).on('init.dt',function() {
 	});
 
 
@@ -350,6 +362,186 @@ $(document).ready(function () {
 	});
 
 
+	var receiptItemsTable;
+	var receiptItemsOverviewTable;
+	$.ajax({
+		"method":"GET",
+		"url": (base_url + "/receipt/ranges"),
+		"success":function(result) {
+			resultObject = JSON.parse(result);
+
+			fromDateString = resultObject.from;
+			toDateString = resultObject.to;
+
+			fromDate = new Date(fromDateString);
+			toDate = new Date(toDateString);
+
+			$('.input-daterange').datepicker({
+				"format":"yyyy-mm-dd"
+			});
+		
+			$('.input-daterange input').each(function(index) {
+				if (index == 0) {
+					$(this).datepicker('setDate',fromDate);
+					$(this).datepicker().on('changeDate',function(e) {
+						fromDateString = formatDate(e.date);
+						$('#receiptsTable').DataTable().ajax.reload();
+						$('#receiptItemsOverviewTable').DataTable().ajax.reload();
+					});
+				}else{
+					$(this).datepicker('setDate',toDate);
+					$(this).datepicker().on('changeDate',function(e) {
+						toDateString = formatDate(e.date);
+						$('#receiptsTable').DataTable().ajax.reload();
+						$('#receiptItemsOverviewTable').DataTable().ajax.reload();
+					});
+				}
+			});
+
+			var receiptsTable = $('#receiptsTable').DataTable({
+				"lengthMenu": [10, 25, 50, 75, 100],
+				"pageLength": 10,
+				"responsive": true,
+				"processing": true,
+				"serverSide": true,
+				"columnDefs": [
+					{"className": "text-center", "targets": [0,1,2,3]}
+				],
+				"ajax": {
+					// url: (base_url + parsePath("/RGMCS-Laravel/public/transaction/view/","/fetchtransactions")),
+					url: (base_url + "/fetchreceipts"),
+					type: "post",
+					headers: {
+						'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+					},
+					data:function ( d ) {
+						d.fromDate = fromDateString;
+						d.toDate = toDateString;
+					}
+				}, 
+				"initComplete": function () {
+					var input = $('.dataTables_filter input').unbind(),
+						self = this.api(),
+						$searchButton = $('<button class="btn btn-primary btn-sm ml-1">')
+							.text('Search')
+							.click(function () {
+								self.search(input.val()).draw();
+							}),
+						$clearButton = $('<button class="btn btn-danger btn-sm ml-1">')
+							.text('Reset')
+							.click(function () {
+								input.val('');
+								$searchButton.click();
+							})
+					$('.dataTables_filter').append($searchButton, $clearButton);
+		
+		
+				}
+			}).on('init.dt',function() {
+				receiptItemsTable = $('#receiptItemsTable').DataTable({
+					"searching":false,
+					"paging":false,
+					"info":false,
+					"columnDefs": [
+						{"className": "text-center", "targets": [0,1,2,3,4,5,6]},
+						{"width":"5%","targets":[2,3,4,5]},
+						{"width":"15%","targets":[6]},
+						{"width":"15%","targets":[1]}
+		
+					]
+				});
+		
+				receiptItemsOverviewTable = $('#receiptItemsOverviewTable').DataTable({
+					"lengthMenu": [10, 25, 50, 75, 100],
+					"pageLength": 10,
+					"responsive": true,
+					"processing": true,
+					"serverSide": true,
+					"columnDefs": [
+						{"className": "text-center", "targets": [0,1,2,3]},
+						{"width":"5%","targets":[1]}
+					],
+					"ajax": {
+						// url: (base_url + parsePath("/RGMCS-Laravel/public/transaction/view/","/fetchtransactions")),
+						url: (base_url + "/fetchreceiptitemsoverview"),
+						type: "post",
+						headers: {
+							'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+						},
+						data:function ( d ) {
+							d.fromDate = fromDateString;
+							d.toDate = toDateString;
+						}
+					}, "initComplete": function () {
+						var input = $('#receiptItemsOverviewTable_filter input').unbind(),
+							self = this.api(),
+							$searchButton = $('<button class="btn btn-primary btn-sm ml-1">')
+								.text('Search')
+								.click(function () {
+									self.search(input.val()).draw();
+								}),
+							$clearButton = $('<button class="btn btn-danger btn-sm ml-1">')
+								.text('Reset')
+								.click(function () {
+									input.val('');
+									$searchButton.click();
+								})
+						$('#receiptItemsOverviewTable_filter').append($searchButton, $clearButton);
+					}
+				});
+			}).on('click','tr', function() {
+		
+				if ($(this).hasClass('table-primary')) {
+					$(this).removeClass('table-primary');
+				}else{
+					receiptsTable.$('tr.table-primary').removeClass('table-primary');
+					$(this).toggleClass('table-primary');
+				}
+				
+				if (receiptsTable.$('tr.table-primary').length == 0) {
+					console.log("Nothing is Selected");
+				} else {
+					console.log("Something is Selected");
+				}
+				
+				selectedRow = receiptsTable.row(this).data();
+		
+				$.ajax({
+					"method":"GET",
+					"url": (base_url + "/notebook/view/receipt"),
+					"data":{
+						"receipt_no":selectedRow[0]
+					},
+					"success":function(result) {
+						resultObject = JSON.parse(result);
+		
+						receipt = resultObject.receipt;
+						receiptItems = resultObject.receipt_items;
+						receiptItemsTable.clear().draw();
+						$('#supplierName').html(receipt.vendor);
+						$('#transactionDateView').html(receipt.tdate);
+						$('#total-label').html(receipt.total);
+						receiptItems.forEach(item => {
+							receiptItemsTable.row.add([
+								item.itemdesc,
+								item.baseprice,
+								item.d1,
+								item.d2,
+								item.d3,
+								item.d4,
+								item.netprice
+							]).draw(false);
+						});
+					}
+				});
+		
+			});
+		}
+	});
+
+
+
+
 
 
 	$('#vendorsTable').on('init.dt',function() {
@@ -393,6 +585,11 @@ $(document).ready(function () {
 			}
 		});
 	});
+
+
+	function formatDate(date) {
+		return date.getFullYear() + "-" +  (date.getMonth() + 1) + "-" + date.getDate()
+	}
 
 
 

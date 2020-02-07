@@ -36,6 +36,12 @@ class TransactionTypeController extends Controller
         }
     }
 
+    public static function flowIs($flow,$direction)
+    {
+        $flows = explode(",",$flow);
+        return in_array($direction,$flows);
+    }
+
     public static function generateOptionString($vid=null){
 
         $data = self::getTransactionType(null,null);

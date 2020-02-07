@@ -72,7 +72,7 @@
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Notebook</h6>
                 <a class="collapse-item" href="{{route('notebook')}}">Encode Notebook Entries</a>
-                <a class="collapse-item" href="#">View Notebook</a>
+                <a class="collapse-item" href="{{route('view-notebook')}}">View Notebook</a>
             </div>
         </div>
                 

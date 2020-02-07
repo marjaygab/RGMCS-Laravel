@@ -69,10 +69,22 @@ Route::get('/backup','BackupDatabaseController@index')->name('backup');
 Route::get('/backup/start','BackupDatabaseController@backupDatabase')->name('dobackup');
 Route::get('/backup/details','BackupDatabaseController@backupDetails')->name('backupdetails');
 
-Route::get('/notebook','NotebookController@index')->name('notebook');
-Route::post('/notebook/new','NotebookController@newTransaction')->name('new-notebook');
+Route::get('/notebook','NoteBookController@index')->name('notebook');
+Route::post('/notebook/new','NoteBookController@newTransaction')->name('new-notebook');
+Route::get('/notebook/view','NoteBookController@viewNotebook')->name('view-notebook');
+
+Route::get('/notebook/{receipt_id}','NoteBookController@editIndex')->name('edit-notebook');
+Route::get('/notebook/view/receipt','NoteBookController@getNotebookReceipt')->name('receipt-notebook');
 
 
+Route::get('/receipt/ranges','ReceiptController@fetchDateRange')->name('receipt-ranges');
+
+// Route::get('/testing/{deviceCode}',
+//     function($deviceCode)
+//     {
+//         return UpdateLocalDatabaseController::updateDeviceStocks($deviceCode);        
+//     }
+// )->name('updatelocal');
 
 
 Route::get('/updatelocal/{deviceCode}',
@@ -97,7 +109,12 @@ Route::post('/fetchitembin','ItemBinController@getAll')->name('fetchitembin');
 Route::post('/fetchitemoverview','ItemOverviewController@getAll')->name('fetchitemoverview');
 Route::post('/fetchcartitems','CartOverviewController@getAll')->name('fetchcartitems');
 Route::post('/fetchstocks','StocksOverviewController@getAll')->name('fetchstocks');
-Route::post('/fetchadminstocks','StocksOverviewController@admingetAll')->name('fetchadminstocks');
+Route::post('/fetchadminstocks','AllStocksController@admingetAll')->name('fetchadminstocks');
+
+
+Route::post('/fetchreceipts','ReceiptController@getAll')->name('fetchreceipts');
+
+Route::post('/fetchreceiptitemsoverview','ReceiptItemsOverviewController@getAll')->name('fetchreceiptitemsoverview');
 
 Route::post('/fetchtransactions','TransactionsOverviewController@getAll')->name('fetchtransactions');
 Route::post('/fetchadmintransactions','TransactionsOverviewController@getAdminTransactions')->name('fetchadmintransactions');

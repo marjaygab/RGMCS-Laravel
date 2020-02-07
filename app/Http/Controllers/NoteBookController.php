@@ -15,6 +15,29 @@ class NoteBookController extends Controller
         return view('addeditnotebook');
     }
 
+
+    public function editIndex(Request $request)
+    {
+        $receipt_no = $request->route('receipt_id');
+        $result = ReceiptController::getReceipt(null,false,false);
+        return json_encode($result);
+    }
+
+    public function viewNotebook(Request $request)
+    {
+        return view('viewnotebook');
+    }
+
+    public function getNotebookReceipt(Request $request)
+    {
+        $receipt_no = $request->all('receipt_no');
+        $result = ReceiptController::getReceipt($receipt_no,true);
+        return json_encode($result);
+    }
+
+
+
+
     public function newTransaction(Request $request)
     {
         $receipts = $request->post('receipts');

@@ -47,32 +47,60 @@ class RGMCSFactory extends Controller
         return $result;
     }
 
-    public static function fetchRows($model,$dbConfig,$whereClause = null,bool $first = null)
+    public static function fetchRows($model,$dbConfig,$whereClause = null,bool $first = null,$orderClause = null)
     {
-        if ($first != null) {
-            if ($first) {
-                if ($whereClause != null) {
-                    $result =  self::connectDB($model,$dbConfig)->where($whereClause)->first();
-                }else{
-                    $result =  self::connectDB($model,$dbConfig)->first();
-                }
-            } else {
-                if ($whereClause != null) {
-                    $result =  self::connectDB($model,$dbConfig)->where($whereClause)->get();
-                }else{
-                    $result =  self::connectDB($model,$dbConfig)->get();
-                }
-            }
-        } else {
-            if ($whereClause != null) {
-                $result =  self::connectDB($model,$dbConfig)->where($whereClause)->get();
-            }else{
-                $result =  self::connectDB($model,$dbConfig)->get();
-            }
+
+        $base = self::connectDB($model,$dbConfig);
+        $partial = $base;
+
+        if ($whereClause != null) {
+            $partial = $base->where($whereClause);
+            $base = $partial;
         }
 
+        if ($orderClause != null) {
+            $partial = $base->orderBy($orderClause[0],$orderClause[1]);
+            $base = $partial;
+        }
+
+        if ($first != null) {
+            if ($first) {
+                $partial = $base->first();
+            }else{
+                $partial = $base->get();
+            }
+        }else{
+            $partial = $base->get();
+        }
+
+
+        $base = $partial;
+        
+        // if ($first != null) {
+        //     if ($first) {
+        //         if ($whereClause != null) {
+        //             $result =  self::connectDB($model,$dbConfig)->where($whereClause)->first();
+        //         }else{
+        //             $result =  self::connectDB($model,$dbConfig)->first();
+        //         }
+        //     } else {
+        //         if ($whereClause != null) {
+        //             $result =  self::connectDB($model,$dbConfig)->where($whereClause)->get();
+        //         }else{
+        //             $result =  self::connectDB($model,$dbConfig)->get();
+        //         }
+        //     }
+        // } else {
+        //     if ($whereClause != null) {
+        //         $result =  self::connectDB($model,$dbConfig)->where($whereClause)->get();
+        //     }else{
+        //         $result =  self::connectDB($model,$dbConfig)->get();
+        //     }
+        // }
+
+
         DB::disconnect();
-        return $result;
+        return $base;
     }
 
     public static function truncateRows($model,$dbConfig)

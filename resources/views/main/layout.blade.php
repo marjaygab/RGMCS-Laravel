@@ -15,7 +15,10 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
     <link href="{{asset('css/sb-admin-2.css')}}" rel="stylesheet">
     <link rel="icon" href="{{url("/favicon.ico")}}" type="image/ico">
-    <link href="{{asset('vendor/bootstrap-datepicker/dist/css/bootstrap-datepicker.css')}}" rel="stylesheet">
+    <link href="{{asset('vendor/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css')}}" rel="stylesheet">
+    <link href="{{asset('vendor/bootstrap-datepicker/dist/css/bootstrap-datepicker3.min.css')}}" rel="stylesheet">
+    <link href="{{asset('vendor/bootstrap-datepicker/dist/css/bootstrap-datepicker3.standalone.min.css')}}" rel="stylesheet">
+    <link href="{{asset('vendor/bootstrap-toggle-master/css/bootstrap-toggle.css')}}" rel="stylesheet">
     
 </head>
 
@@ -163,7 +166,8 @@
 	<!-- Page level custom scripts -->
 	<!-- <script src="../dist/js/demo/chart-area-demo.js"></script>
 	<script src="../dist/js/demo/chart-pie-demo.js"></script> -->
-	<script src="{{asset('vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.js')}}"></script>
+    <script src="{{asset('vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.js')}}"></script>
+    <script src="{{asset('vendor/bootstrap-toggle-master/js/bootstrap-toggle.js')}}"></script>
     <script src="{{asset('js/demo/datatables-demo.js')}}"></script>
     <script src="{{asset('js/notebook/Items.js')}}"></script> 
     <script src="{{asset('js/notebook/Receipt.js')}}"></script>

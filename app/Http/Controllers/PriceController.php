@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Price;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class PriceController extends Controller
@@ -17,14 +18,21 @@ class PriceController extends Controller
         return $result;
     }
 
-    public function setPrice($itemno,$price)
+    public static function setPrice($itemno,$price)
     {
         $parameters = [
             'price'=>$price
         ];
 
-        $result = RGMCSFactory::updateRows(new Price(),env('DB_CONFIG_WAREHOUSE_ENCODER_DB'),['itemno',"=",$itemno],$parameters);
+        $result = self::getPrice($itemno);
 
+
+        if ($result == false || $result == null) {
+            $result = RGMCSFactory::insertRows(new Price(),env('DB_CONFIG_WAREHOUSE_ENCODER_DB'),['itemno'=>$itemno,'price'=>0.00,'updated_at'=>Carbon::now()]);
+            // $result = RGMCSFactory::updateRows(new Price(),env('DB_CONFIG_WAREHOUSE_ENCODER_DB'),['itemno',"=",$itemno],$parameters);
+        }else{
+            $result = RGMCSFactory::updateRows(new Price(),env('DB_CONFIG_WAREHOUSE_ENCODER_DB'),['itemno'=>$itemno],$parameters);
+        }
         return $result > 0;
     }
 

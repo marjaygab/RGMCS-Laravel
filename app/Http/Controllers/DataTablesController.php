@@ -8,85 +8,121 @@ use Illuminate\Support\Facades\DB;
 class DataTablesController extends Controller
 {
     //
-    public static function generateResult(Request $request,$model,$dbConfig,array $columns,$whereParam,$additionalParam = null)
+    public static function generateResult(Request $request,$model,$dbConfig,array $columns,$whereParam,$additionalParam = null,$whereBetween = null)
     {
         $model->setConnection($dbConfig);
         $result = $model->get();
-        // $result = RGMCSFactory::connectDB($items,env('DB_CONFIG_REFERENCES'))->get();
-
-        $data = array();
 
         $total = $result->count();
         $totalFiltered = $total;
 
+        $base = $model;
+        $partial = $base;
+
         if ($request->post("search")['value'] != null) {
             $searchValue = $request->post("search")['value'];
 
+            $partial = $base->where($whereParam,'like','%' . $searchValue . '%');
+            $base = $partial;
+
             if ($additionalParam != null) {
-                $result = $model
-                ->where($whereParam,'like','%' . $searchValue . '%')
+                $result = $partial
                 ->orWhere($additionalParam)
-                ->orderBy($columns[$request->post("order")[0]['column']],$request->post("order")[0]['dir'])->get();
+                ->orderBy($columns[$request->post("order")[0]['column']],$request->post("order")[0]['dir'])
+                ->get();
                 
                 $totalFiltered = $result->count();
 
-                $result = $model
-                ->where($whereParam,'like','%' . $searchValue . '%')
-                ->orWhere($additionalParam)
-                ->orderBy($columns[$request->post("order")[0]['column']],$request->post("order")[0]['dir'])
-                ->offset($request->post("start"))
-                ->limit($request->post("length"))
-                ->get();
+                $partial = $base->orWhere([$additionalParam]);
+
+                if ($whereBetween != null) {
+                    $partial = $base->whereBetween($whereBetween[0],$whereBetween[1]);
+
+                    $result = $partial
+                    ->orWhere($additionalParam)
+                    ->orderBy($columns[$request->post("order")[0]['column']],$request->post("order")[0]['dir'])
+                    ->get();
+
+                    $totalFiltered = $result->count();
+                }
+
+                $base = $partial;
             }else{
-                $result = $model
-                ->where($whereParam,'like','%' .$searchValue . '%')
-                ->orderBy($columns[$request->post("order")[0]['column']],$request->post("order")[0]['dir'])->get();
+                $result = $partial
+                ->orderBy($columns[$request->post("order")[0]['column']],$request->post("order")[0]['dir'])
+                ->get();
                 
                 $totalFiltered = $result->count();
-    
-                $result = $model
-                ->where($whereParam,'like','%' . $searchValue . '%')
-                ->orderBy($columns[$request->post("order")[0]['column']],$request->post("order")[0]['dir'])
-                ->offset($request->post("start"))
-                ->limit($request->post("length"))
-                ->get();
+
+                if ($whereBetween != null) {
+                    $partial = $base->whereBetween($whereBetween[0],$whereBetween[1]);
+
+                    $result = $partial
+                    ->orderBy($columns[$request->post("order")[0]['column']],$request->post("order")[0]['dir'])
+                    ->get();
+                    $totalFiltered = $result->count();
+                    $base = $partial;
+                }
             }
 
+            $partial = $base
+            ->orderBy($columns[$request->post("order")[0]['column']],$request->post("order")[0]['dir']);
 
+            $base = $partial;
             
+            if ($request->post('length') != -1) {
+                $partial = $base
+                ->offset($request->post("start"))
+                ->limit($request->post("length"));
+                $base = $partial;
+            }
+
+            $partial = $base->get();
+            $base = $partial;
 
         } else {
 
-            if ($request->post('length') == -1) {
-                if ($additionalParam != null) {
-                    $result = $model
-                    ->where([$additionalParam])
+            if ($additionalParam != null) {
+                $partial = $base->where([$additionalParam]);
+
+                if ($whereBetween != null) {
+                    $partial = $base->orWhereBetween($whereBetween[0],$whereBetween[1]);
+                    $result = $partial
                     ->orderBy($columns[$request->post("order")[0]['column']],$request->post("order")[0]['dir'])
                     ->get();
-                }else{
-                    $result = $model
-                    ->orderBy($columns[$request->post("order")[0]['column']],$request->post("order")[0]['dir'])
-                    ->get();
+                    $totalFiltered = $result->count();
+
                 }
-            } else {
-                if ($additionalParam != null) {
-                    $result = $model
-                    ->where([$additionalParam])
+
+                $base = $partial;
+            }else{
+                if ($whereBetween != null) {
+                    $partial = $base->whereBetween($whereBetween[0],$whereBetween[1]);
+                    $result = $partial
                     ->orderBy($columns[$request->post("order")[0]['column']],$request->post("order")[0]['dir'])
-                    ->offset($request->post("start"))
-                    ->limit($request->post("length"))
                     ->get();
-                }else{
-                    $result = $model
-                    ->orderBy($columns[$request->post("order")[0]['column']],$request->post("order")[0]['dir'])
-                    ->offset($request->post("start"))
-                    ->limit($request->post("length"))
-                    ->get();
+                    $totalFiltered = $result->count();
+                    $base = $partial;
                 }
             }
+
+            $partial = $base->orderBy($columns[$request->post("order")[0]['column']],$request->post("order")[0]['dir']);
+            $base = $partial;
             
+            if ($request->post('length') != -1) {
+                $partial = $base
+                ->offset($request->post("start"))
+                ->limit($request->post("length"));
+                $base = $partial;
+            }
+
+            $partial = $base->get();
+            $base = $partial;
 
         }
+
+        $result = $base;
+        
     
         DB::disconnect();
 
@@ -95,32 +131,6 @@ class DataTablesController extends Controller
             'total'=>$total,
             'totalFiltered'=>$totalFiltered
         );
-        // foreach ($result as $key => $item) {
-        //     $nestedData=array(); 
-        //     $addtype = "1".substr($item['item_type'],0,1)."1";
-        //     $idnum = $addtype .  str_pad($item["itemno"], 6, '0', STR_PAD_LEFT);
-
-        //     $nestedData[] = $idnum;
-        //     $nestedData[] = $item["itemdesc"];
-        //     $nestedData[] = $item["unit"];
-        //     $itemno = $item['itemno'];
-        //     $route = route('edititems',['edititemno'=>$itemno]);
-        //     $nestedData[] = "<a href='$route' class='btn btn-primary btn-icon-split btn-sm'>
-        //     <span class='icon text-white-50'>
-        //       <i class='fas fa-edit'></i>
-        //     </span>
-        //     <span class='text'>Edit Item</span>
-        //   </a>";
-        //     $data[] = $nestedData;
-        // }
-
-        // $json_data = array(
-        //             "draw"            => intval( $request->post('draw')),   // for every request/draw by clientside , they send a number as a parameter, when they recieve a response/data they first check the draw number, so we are sending same number in draw. 
-        //             "recordsTotal"    => intval( $total ),  // total number of records
-        //             "recordsFiltered" => intval( $totalFiltered ), // total number of records after searching, if there is no searching then totalFiltered = totalData
-        //             "data"            => $data   // total data array
-        //     );
-        // return json_encode($json_data);
     }
 
     public static function generateJson($draw,$recordsTotal,$recordsFiltered,$data,$additionaldata = null)

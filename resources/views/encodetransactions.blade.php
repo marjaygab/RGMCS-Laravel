@@ -43,7 +43,7 @@
                                 <div class="input-group-prepend">
                                   <span class="input-group-text" id="unit_cost_label">₱</span>
                                 </div>
-                                <input type="number" class="form-control" placeholder="0.00" aria-label="0.00" aria-describedby="unit_cost_label" name="unit_cost" @if (empty($encodeunitcost))
+                                <input type="number" class="form-control" placeholder="0.00" aria-label="0.00" aria-describedby="unit_cost_label" name="unit_cost" @if (empty($encodeitemno))
                                     disabled
                                 @endif required value="{{$encodeunitcost ?? ''}}">
                             </div>
@@ -57,7 +57,7 @@
                                 <div class="input-group-prepend">
                                   <span class="input-group-text" id="tdate_label"><span class="fas fa-calendar"></span></span>
                                 </div>
-                                <input type="text" id="datepicker" class="form-control" placeholder="{{date('Y-m-d')}}" aria-label="0.00" aria-describedby="tdate_label" name="tdate" @if (empty($encodeunitcost))
+                                <input type="text" id="datepicker" class="form-control" placeholder="{{date('Y-m-d')}}" aria-label="0.00" aria-describedby="tdate_label" name="tdate" @if (empty($encodeitemno))
                                     disabled
                                 @endif required value="{{$tdate ?? ''}}">
                             </div>
@@ -76,7 +76,7 @@
                         <div class="col-sm-12">
                             <div class="form-group">
                                 <label>Transaction Type</label>
-                                <select name="transaction_type" id="" class="form-control" @if (empty($encodeunitcost))
+                                <select name="transaction_type" id="" class="form-control" @if (empty($encodeitemno))
                                 disabled
                             @endif>
                                     {!!$transaction_type_options!!}
@@ -89,7 +89,7 @@
                         <div class="col-sm-12">
                             <div class="form-group">
                                 <label>Vendor</label>
-                                <select name="vendor" id="" class="form-control" @if (empty($encodeunitcost))
+                                <select name="vendor" id="" class="form-control" @if (empty($encodeitemno))
                                 disabled
                             @endif>
                                     {!!$vendor_options!!}
@@ -101,13 +101,13 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="form-group">
-                                <label>Quantity</label> <input class="form-control" name="qty" step="any" type="number" value="0" min="0" @if (empty($encodeunitcost))
+                                <label>Quantity</label> <input class="form-control" name="qty" step="any" type="number" value="0" min="0" @if (empty($encodeitemno))
                                 disabled
                             @endif>
                             </div>
                         </div>
                     </div>
-                    <input type="submit" value="Add to Cart" class="btn btn-lg btn-success btn-block" @if (empty($encodeunitcost))
+                    <input type="submit" value="Add to Cart" class="btn btn-lg btn-success btn-block" @if (empty($encodeitemno))
                     disabled
                 @endif/>
                 </fieldset>

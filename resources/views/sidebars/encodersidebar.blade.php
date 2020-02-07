@@ -74,10 +74,10 @@
             </a>
             <div id="updateLocalMenu" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
-                    <a class="collapse-item" href="login.html">From References<div><small class="text-danger d-inline-block">{{DatabaseHistoryController::generateHistoryString('REFERENCES')}}</small></div></a>
+                    <a class="collapse-item" href="{{route('updatelocal',['deviceCode'=>"REFERENCES"])}}">From References<div><small class="text-danger d-inline-block">{{DatabaseHistoryController::generateHistoryString('REFERENCES')}}</small></div></a>
                     
                     @if (env('DEVICE_CODE') != "WAREHOUSE_ENCODER")
-                        <a class="collapse-item" href="login.html">From Warehouse Encoder <div><small class="text-danger d-inline-block">{{DatabaseHistoryController::generateHistoryString('WAREHOUSE_ENCODER')}}</small></div></a>
+                        <a class="collapse-item" href="{{route('updatelocal',['deviceCode'=>"WAREHOUSE_ENCODER"])}}">From Warehouse Encoder <div><small class="text-danger d-inline-block">{{DatabaseHistoryController::generateHistoryString('WAREHOUSE_ENCODER')}}</small></div></a>
                     @endif
                     {{-- <a class="collapse-item" href="login.html">From Warehouse Encoder</a> --}}
                 </div>

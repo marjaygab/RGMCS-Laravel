@@ -58,6 +58,14 @@ class StockController extends Controller
 
     }
 
+
+    public static function newStock($itemno ,$environment)
+    {
+        $result = RGMCSFactory::insertRows(new Stock(),$environment,['itemno'=>$itemno,'qty'=>0]);
+
+        return $result;
+    }
+
     public static function setStock($itemno,$parameters)
     {
         

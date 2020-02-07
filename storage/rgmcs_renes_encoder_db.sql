@@ -62,7 +62,7 @@ CREATE TABLE `database_history` (
 
 LOCK TABLES `database_history` WRITE;
 /*!40000 ALTER TABLE `database_history` DISABLE KEYS */;
-INSERT INTO `database_history` VALUES (1,'2020-01-29 11:39:19','BEY7');
+INSERT INTO `database_history` VALUES (1,'2020-02-06 16:45:02','K1HT');
 /*!40000 ALTER TABLE `database_history` ENABLE KEYS */;
 UNLOCK TABLES;
 DROP TABLE IF EXISTS `item_overview_view`;

@@ -4,6 +4,8 @@ $(document).ready(function() {
     var toggleButton = document.getElementById("toggleButton");
     var toggleState = true;
 
+    var toggleView = $('#toggleView').bootstrapToggle();
+
     if (toggleButton != null && costColumn != null) {
         toggleButton.classList.add("btn-success");
         if (toggleState) {
@@ -38,4 +40,31 @@ $(document).ready(function() {
             }
         }
     }
+
+    if (toggleView != null) {
+        $('#receiptView').toggleClass('d-none');
+        toggleView.change(function() {
+            if ($(this).prop('checked')) {
+                //receipt view
+                if ($('#receiptView').hasClass('d-none')) {
+                    $('#receiptView').removeClass('d-none');
+                }
+                $('#itemsView').toggleClass('d-none');
+            }else{
+                //items view
+
+                if ($('#itemsView').hasClass('d-none')) {
+                    $('#itemsView').removeClass('d-none');
+                }
+                $('#receiptView').toggleClass('d-none');
+
+            }        
+        });
+    }
+
+
+    
+
+
+
 })

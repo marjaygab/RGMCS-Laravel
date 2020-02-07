@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Stock;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Symfony\Component\Process\Process;
 use Spatie\Dropbox\Client;
@@ -142,6 +144,11 @@ class UpdateLocalDatabaseController extends Controller
             ->setCommand()
             ->run();
 
+
+            if ($device == "REFERENCES") {
+                self::updateDeviceStocks($device);
+            }
+
             if ($result) {
                 return redirect('/dashboard');
             }else{
@@ -152,6 +159,74 @@ class UpdateLocalDatabaseController extends Controller
         }
 
         
+    }
+
+
+    public static function updateDeviceStocks($device)
+    {
+        //do removung and adding here
+        // check item catalog for new and removed items
+
+        $itemCatalog = ItemCatalogController::getItems();
+        $stocks = StockController::getStock(null,null,env("DB_CONFIG_" . env('DEVICE_CODE')));
+
+        $addingResult = null;
+        $deletingResult = null;
+        $itemCatalogNumbers = array();
+        $stockItemNumbers = array();
+
+        foreach ($itemCatalog as $value) {
+            $itemCatalogNumbers[] = $value->id;
+        }
+
+        foreach ($stocks as $value) {
+            $stockItemNumbers[] = $value->itemno;
+        }
+
+
+        //if count(itemVRedor) is > 1, there are added items
+        $itemVStocks = array_diff($itemCatalogNumbers,$stockItemNumbers);
+        $added = array();
+        foreach ($itemVStocks as $value) {
+            $added[] = $value;
+        }
+
+        //if count(redorVItem) is > 1, there are deleted items
+        $stocksVItem = array_diff($stockItemNumbers,$itemCatalogNumbers);
+
+        $deleted = array();
+        foreach ($stocksVItem as $value) {
+            $deleted[] = $value;
+        }
+
+        $hasDeleted = count($stocksVItem) > 0;
+        $hasAdded = count($itemVStocks) > 0;
+
+
+        if (count($added) != 0) {
+            $toAdd = array();
+
+            foreach ($added as $value) {
+                $toAdd[] = ['itemno'=>$value,'qty'=>0,'updated_at'=>Carbon::now()];
+            }
+
+            $addResult = RGMCSFactory::insertRows(new Stock(),env('DB_CONFIG_' . env('DEVICE_CODE')),$toAdd);
+            if ($addResult > 0) {
+                $addingResult = true;
+            }
+        }
+
+
+        if (count($deleted) != 0) {
+            $toDelete = array();
+            foreach ($deleted as $value) {
+                $toDelete[] = ['itemno'=>$value];
+            }
+
+            foreach ($toDelete as $value) {
+                $deleteResult = RGMCSFactory::deleteRows(new Stock(),env('DB_CONFIG_' . env('DEVICE_CODE')),$value);
+            }
+        }
     }
 
 

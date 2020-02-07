@@ -43,14 +43,25 @@ class CartController extends Controller
             $tDate = $request->post('tdate');
             $qtyIn = 0;
             $qtyOut = 0;
-            switch ($transactionType->flow) {
-                case 'IN':
-                    $qtyIn = $request->post('qty');
-                    break;
-                case 'OUT':
-                    $qtyOut = $request->post('qty');
-                    break;
+
+
+
+            if (TransactionTypeController::flowIs($transactionType->flow,"IN")) {
+                # code...
+                $qtyIn = $request->post('qty');
+            }else if (TransactionTypeController::flowIs($transactionType->flow,"OUT")) {
+                $qtyOut = $request->post('qty');
             }
+
+            
+            // switch ($transactionType->flow) {
+            //     case 'IN':
+            //         $qtyIn = $request->post('qty');
+            //         break;
+            //     case 'OUT':
+            //         $qtyOut = $request->post('qty');
+            //         break;
+            // }
 
             if (self::insertCartItem($transactionType->description,$itemNo,$vendor,$unit_cost,$qtyIn,$qtyOut,$tDate)) {
                 return redirect(route('encode'));

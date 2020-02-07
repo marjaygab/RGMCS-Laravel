@@ -54,11 +54,25 @@ class TransactionsController extends Controller
             'transaction_type_options'=>TransactionTypeController::generateOptionString(),
             'encodeitemdesc'=>$item->itemdesc,
             'encodeitemno'=>$itemno,
-            'encodeunitcost'=>strval(PriceController::getPrice($itemno)->price)
+            'encodeunitcost'=>strval($this->getPricefromWarehouse($itemno))
         ];
 
         return view('encodetransactions')->with($toPass);
     }
+
+    public function getPricefromWarehouse($itemno)
+    {
+        $result = PriceController::getPrice($itemno);
+
+        if ($result != false || $result != null) {
+            $price = $result->price;
+
+            return $price;
+        }else{
+            return 0;
+        }
+    }
+
 
     public function processCart()
     {
@@ -72,8 +86,8 @@ class TransactionsController extends Controller
             $itemno = $item['itemno'];
             $flow = TransactionTypeController::getFlow($transaction_type);
 
-            if ($flow == 'IN' || $flow == 'OUT') {
-                $result = $this->setQty($itemno,$flow,$item['qtyin'],$item['qtyout']);
+            if (TransactionTypeController::flowIs($flow,'IN') || TransactionTypeController::flowIs($flow,'OUT')) {
+                $result = $this->setQty($itemno,$item['qtyin'],$item['qtyout']);
 
                 if ($result == false) {
                     $errors[] = "An error occured while processing '" . $itemdesc . "'";
@@ -84,9 +98,13 @@ class TransactionsController extends Controller
                     }
                 }
                 
-            }else if ($flow =='NA') {
+            }
+            
+            if (TransactionTypeController::flowIs($flow,'NA')) {
                 if (env('DEVICE_CODE') == "WAREHOUSE_ENCODER") {
-                    $this->setPrice($itemno,$item['price']);
+                    $this->setPrice($itemno,$item['unit_cost']);
+                }else{
+                    dd("Testing");
                 }
             }
         }
@@ -129,7 +147,7 @@ class TransactionsController extends Controller
 
 
 
-    public function setQty($itemno,$flow,$qtyin,$qtyout)
+    public function setQty($itemno,$qtyin,$qtyout)
     {
         $result = StockController::setQty($itemno,$qtyin,$qtyout);
         return $result;
@@ -137,7 +155,8 @@ class TransactionsController extends Controller
 
     public function setPrice($itemno,$price)
     {
-        # code...
+        $return = PriceController::setPrice($itemno,$price);
+        return $return;
     }
 
     
