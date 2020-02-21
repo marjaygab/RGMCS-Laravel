@@ -62,6 +62,18 @@ class Receipt{
         }
     }
 
+    getDate(){
+        return this.tDate;
+    }
+
+    getVendor(){
+        return this.vendor;
+    }
+
+    getVid(){
+        return this.vid;
+    }
+
     setVendor(vid,vendor){
         this.vid = vid;
         this.vendor = vendor;

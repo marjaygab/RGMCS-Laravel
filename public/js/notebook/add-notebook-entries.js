@@ -1,8 +1,12 @@
 $(document).ready(function () {
 
+    var base_url = "http://localhost/RGMCS-Laravel/public";
     currentPath = parsePath("/RGMCS-Laravel/public/","");
 
-    if (currentPath == "/notebook") {
+    console.log(currentPath);
+    
+    if (currentPath == "/notebook" || currentPath.includes("/notebook/edit",0)) {
+
         var vendorSelection = document.getElementById("vendorSelection");
         var itemsSelection = document.getElementById("itemsSelection");
         var basePrice = document.getElementById('basePrice');
@@ -38,6 +42,53 @@ $(document).ready(function () {
         var dateString = dateSelected.getFullYear() + "-" + minTwoDigits(dateSelected.getMonth() + 1) + "-" + minTwoDigits(dateSelected.getDate());
         $('#transactionDateView').html(dateString);
     
+
+        if (currentPath.includes("/notebook/edit",0)) {
+            receipt_no = currentPath.replace("/notebook/edit/","");
+            
+            $.ajax({
+                url: base_url + '/receipt/' + receipt_no,
+                type: 'GET',
+                success: function (result) {
+                    var responseBody = JSON.parse(result);
+                    var receipt = responseBody.receipt;
+                    var receiptItems = responseBody.receipt_items;
+
+                    myReceipt = new Receipt(receipt.tdate,receipt.vid,receipt.vendor);
+                    
+                    receiptItems.forEach(item => {
+                        myReceipt.addItem(
+                            new Items(
+                                item.itemno,
+                                item.itemdesc,
+                                item.baseprice,
+                                item.d1,
+                                item.d2,
+                                item.d3,
+                                item.d4,
+                                item.netprice
+                            )
+                        );
+                    });
+                    myReceipt.setTotalNetPrice();
+                    
+
+                    $('#transactionDateView').html(myReceipt.getDate());
+                    $('.input-group.date').datepicker("setDate", new Date(myReceipt.getDate()));
+                    $('#itemListContainer').html(myReceipt.generate());
+                    $('#total-label').html(myReceipt.getTotalNetPrice());
+                    $('#supplierName').html(myReceipt.getVendor())
+                    $('#vendorSelection').val(myReceipt.getVid());
+                    
+                },
+                error: function (error) {
+                    console.log(`Error: ${error}`);
+                }
+            });
+
+        }
+
+
     
         $('#receiptItemsTable').DataTable({
             "data":dataSource
@@ -172,6 +223,15 @@ $(document).ready(function () {
                 $('.control').prop('disabled',false);
                 $(this).val('Add Item');
                 $('tr.bg-info').toggleClass('table-info');
+
+
+                $('#basePrice').val(0);
+                netPrice.value = 0;
+                $('#discount1').val(0);
+                $('#discount2').val(0);
+                $('#discount3').val(0);
+                $('#discount4').val(0);
+                toggleAddingControls(true);
             }
     
         });
@@ -214,6 +274,7 @@ $(document).ready(function () {
     
         $(document).on('click', ".editItem", function () {
             $('.control').prop('disabled', true);
+            toggleAddingControls(false);
             toUpdateIndex = $(this).attr('class').split(/\s+/)[2];
             toUpdateItemNo = $(this).attr('class').split(/\s+/)[3];
             var item = myReceipt.getItemByIndex(toUpdateIndex);

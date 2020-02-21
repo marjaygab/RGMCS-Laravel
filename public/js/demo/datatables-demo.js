@@ -40,6 +40,9 @@ $(document).ready(function () {
 	}
 
 
+
+
+
 	function parsePath(originalTransactionsPath,desiredPath) {
 		var currentPath = window.location.pathname;
 		toPath = desiredPath;
@@ -366,7 +369,7 @@ $(document).ready(function () {
 	var receiptItemsOverviewTable;
 	$.ajax({
 		"method":"GET",
-		"url": (base_url + "/receipt/ranges"),
+		"url": (base_url + "/receipt-info/ranges"),
 		"success":function(result) {
 			resultObject = JSON.parse(result);
 
@@ -445,8 +448,8 @@ $(document).ready(function () {
 					"columnDefs": [
 						{"className": "text-center", "targets": [0,1,2,3,4,5,6]},
 						{"width":"5%","targets":[2,3,4,5]},
-						{"width":"15%","targets":[6]},
-						{"width":"15%","targets":[1]}
+						// {"width":"15%","targets":[6]},
+						// {"width":"15%","targets":[1]}
 		
 					]
 				});
@@ -458,7 +461,7 @@ $(document).ready(function () {
 					"processing": true,
 					"serverSide": true,
 					"columnDefs": [
-						{"className": "text-center", "targets": [0,1,2,3]},
+						{"className": "text-center", "targets": [0,1,2,3,10]},
 						{"width":"5%","targets":[1]}
 					],
 					"ajax": {
@@ -488,6 +491,81 @@ $(document).ready(function () {
 								})
 						$('#receiptItemsOverviewTable_filter').append($searchButton, $clearButton);
 					}
+				}).on('draw.dt',function() {
+					$('.receipt-items-edit').on('click',function() {
+						var receipt_item_no = $(this).attr('value');
+						var receipt_no = $(this).attr('receipt-no');
+						$.ajax({
+							"method":"GET",
+							"url": (base_url + "/receipt-item"),
+							"data":{
+								"receipt_item_no":receipt_item_no
+							},
+							"success":function(result) {
+								resultObject = JSON.parse(result);
+								$.ajax({
+									"method":"GET",
+									"url": (base_url + "/items/options"),
+									"data":{
+										"itemno":resultObject.itemno
+									},
+									"success":function(result) {
+										resultString = JSON.parse(result);
+										
+										$('#receiptId.modal-field').val(receipt_no);
+										$('#receiptItemNo.modal-field').val(receipt_item_no);
+										$('#itemsSelection.modal-field').html(resultString.optionsString);
+										$('#basePrice.modal-field').val(resultObject.baseprice);
+										$('#discount1.modal-field').val(resultObject.d1);
+										$('#discount2.modal-field').val(resultObject.d2);
+										$('#discount3.modal-field').val(resultObject.d3);
+										$('#discount4.modal-field').val(resultObject.d4);
+										$('#netPrice.modal-field').val(resultObject.netprice);
+
+										var currentBasePrice = resultObject.baseprice;
+										var currentD1 = resultObject.d1;
+										var currentD2 = resultObject.d2;
+										var currentD3 = resultObject.d3;
+										var currentD4 = resultObject.d4;
+										var currentNetPrice = resultObject.netprice;
+
+
+										var showComputed = function() {
+											$('#netPrice.modal-field').val(computeNetPrice(
+												currentBasePrice,
+												currentD1,
+												currentD2,
+												currentD3,
+												currentD4,
+											));
+										}
+
+										$('#basePrice.modal-field').on('change',function() {
+											currentBasePrice = $(this).val();
+											showComputed();
+										});
+										$('#discount1.modal-field').on('change',function() {
+											currentD1 = $(this).val();
+											showComputed();
+										});
+										$('#discount2.modal-field').on('change',function() {
+											currentD2 = $(this).val();
+											showComputed();
+										});
+										$('#discount3.modal-field').on('change',function() {
+											currentD3 = $(this).val();
+											showComputed();
+										});
+										$('#discount4.modal-field').on('change',function() {
+											currentD4 = $(this).val();
+											showComputed();
+										});
+
+									}
+								});
+							}
+						});
+					});
 				});
 			}).on('click','tr', function() {
 		
@@ -589,6 +667,23 @@ $(document).ready(function () {
 
 	function formatDate(date) {
 		return date.getFullYear() + "-" +  (date.getMonth() + 1) + "-" + date.getDate()
+	}
+	function computeNetPrice(base, d1, d2, d3, d4) {
+		d1 = parseInt(d1);
+		d2 = parseInt(d2);
+		d3 = parseInt(d3);
+		d4 = parseInt(d4);
+		base = parseFloat(base);
+		discounts = [d1, d2, d3, d4];
+
+		net = base;
+		discounts.forEach(element => {
+			if (element != 0) {
+				net = net - (net * (element / 100))
+			}
+		});
+
+		return net.toFixed(2);
 	}
 
 

@@ -29,7 +29,7 @@ class ReceiptItemsOverviewController extends Controller
             $receiptItemsOverview,
             env("DB_CONFIG_RENES_ADMIN"),
             [
-                'id',
+                'receipt_no',
                 'tdate', 
                 'vendor',
                 'itemdesc',
@@ -38,7 +38,8 @@ class ReceiptItemsOverviewController extends Controller
                 'd2',
                 'd3',
                 'd4',
-                'netprice'      
+                'netprice',
+                'action'     
             ],
             'itemdesc',
             null,
@@ -47,8 +48,11 @@ class ReceiptItemsOverviewController extends Controller
 
 		$data = array();
 		foreach ($result['result'] as $key => $receipt) {
-			$nestedData = array();
-            $nestedData[] = $receipt['id'];
+            $nestedData = array();
+            $receipt_no = $receipt['receipt_no'];
+            $receipt_item_no = $receipt['receipt_item_no'];
+            $nestedData[] = $receipt_no;
+
             // $nestedData[] = date_format($receipt['tdate'],"Y/m/d h:i A");
 
             $tDate = strtotime($receipt['tdate']);
@@ -63,14 +67,16 @@ class ReceiptItemsOverviewController extends Controller
             $nestedData[] = "₱ " . $receipt['netprice'];
             // $nestedData[] = date_format($receipt['created_at'],"Y/m/d h:i A");
 
-            // $route = route('edit-notebook');
+            $route = route('edit-notebook',['receipt_id'=>$receipt_no]);
 
-        //     $editAction = "<a href='$route' class='btn btn-primary btn-icon-split btn-sm'>
-        //     <span class='icon text-white-50'>
-        //       <i class='fas fa-edit'></i>
-        //     </span>
-        //     <span class='text'>Edit Item</span>
-        //   </a>";
+            $editAction = "<button class='btn btn-primary btn-icon-split btn-sm receipt-items-edit' value='$receipt_item_no' receipt-no='$receipt_no' data-toggle='modal' data-target='#editReceiptItemModal'>
+            <span class='icon text-white-50'>
+              <i class='fas fa-edit'></i>
+            </span>
+            <span class='text'>Edit Item</span>
+          </button>";
+
+            $nestedData[] = $editAction;
 
 
 			$data[] = $nestedData;

@@ -19,8 +19,16 @@ class NoteBookController extends Controller
     public function editIndex(Request $request)
     {
         $receipt_no = $request->route('receipt_id');
-        $result = ReceiptController::getReceipt(null,false,false);
-        return json_encode($result);
+        $result = ReceiptController::getReceipt($receipt_no,true,true);
+
+        session()->put('toEditReceipt',true);
+        session()->put('toEditReceiptNo',$receipt_no);
+
+
+
+        return view('addeditnotebook')
+        ->with($result)
+        ->with('receipt_id',$receipt_no);
     }
 
     public function viewNotebook(Request $request)

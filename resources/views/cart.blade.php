@@ -1,4 +1,5 @@
 
+<?php use \App\Http\Controllers\CartController; ?>
 @extends('main.layout',['current_user'=>session()->get('current_user')])
 
 @section('sidebar_menu')
@@ -45,7 +46,9 @@
                             </tbody>
                         </table>
                     </div>
-                    <a href="{{route('processcart')}}" class="btn btn-success btn-icon-split mt-4">
+                    <a href="{{route('processcart')}}" class="btn btn-success btn-icon-split mt-4 @if (CartController::getCartItemCount() === 0 )
+                    disabled
+                @endif" >
                         <span class="icon text-white-50">
                             <i class="fas fa-cogs"></i>
                         </span>
@@ -63,3 +66,5 @@
     </div>
 </div>
 @endsection
+
+

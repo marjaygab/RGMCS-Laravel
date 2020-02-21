@@ -24,6 +24,7 @@ Route::get('/logout','UserController@logoutUser')->name('logout');
 Route::post('/authenticate','UserController@authenticateUser')->name('authenticate');
 
 Route::get('/items','ItemCatalogController@index')->name('items');
+Route::get('/items/options','ItemCatalogController@getOptionsStringRequest')->name('items-options');
 Route::get('/items/{edititemno}','ItemCatalogController@editItem')->name('edititems');
 Route::post('/items/update/{edititemno}','ItemCatalogController@updateItem')->name('updateitems');
 Route::post('/items/create','ItemCatalogController@createItem')->name('createitems');
@@ -73,11 +74,15 @@ Route::get('/notebook','NoteBookController@index')->name('notebook');
 Route::post('/notebook/new','NoteBookController@newTransaction')->name('new-notebook');
 Route::get('/notebook/view','NoteBookController@viewNotebook')->name('view-notebook');
 
-Route::get('/notebook/{receipt_id}','NoteBookController@editIndex')->name('edit-notebook');
+Route::get('/notebook/edit/{receipt_id}','NoteBookController@editIndex')->name('edit-notebook');
 Route::get('/notebook/view/receipt','NoteBookController@getNotebookReceipt')->name('receipt-notebook');
 
+Route::get('/receipt-item','ReceiptItemsController@getReceiptItem')->name('receipt-items');
+Route::post('/receipt-item/update','ReceiptItemsController@updateReceiptItem')->name('update-receipt-item');
 
-Route::get('/receipt/ranges','ReceiptController@fetchDateRange')->name('receipt-ranges');
+Route::get('/receipt/{receipt_id}','ReceiptController@getReceiptJson')->name('get-receipt');
+Route::post('/receipt/update','ReceiptController@updateReceipt')->name('update-receipt');
+Route::get('/receipt-info/ranges','ReceiptController@fetchDateRange')->name('receipt-ranges');
 
 // Route::get('/testing/{deviceCode}',
 //     function($deviceCode)

@@ -44,7 +44,44 @@ class ReceiptController extends Controller
         return $dateRangeResponse;
     }
 
+    public function updateReceipt(Request $request)
+    {
+        $parameters = [
+            'vid'=>$request->post('vid'),
+            'vendor'=>VendorController::getVendor($request->post('vid'),true)->vendor,
+            'tdate'=>$request->post('tdate'),
+            'total'=>$request->post('total')
+        ];
 
+        $result = self::updateReceiptDetails($request->post('receipt_no'),$parameters);
+
+        if ($result) {
+            return back();
+        }else{
+            return back()->withErrors(['msg'=>'An error occured in updating receipt.']);
+        }
+    }
+
+
+
+    public static function updateReceiptDetails($receipt_no,$parameters)
+    {
+        $result = RGMCSFactory::updateRows(new Receipt(),env('DB_CONFIG_RENES_ADMIN'),['id'=>$receipt_no],$parameters);
+
+        return $result > 0;
+    }
+
+    public static function recalculateTotal($receipt_no)
+    {
+        $total = ReceiptItemsController::getTotal($receipt_no);
+        $parameters = [
+            'total'=>$total
+        ];
+
+        $result = self::updateReceiptDetails($receipt_no,$parameters);
+
+        return $result;
+    }
 
 
     public static function newReceipt($tDate,$vid,$vendor,$total)
@@ -62,6 +99,24 @@ class ReceiptController extends Controller
 
         return $result;
     }
+
+    public function getReceiptJson(Request $request)
+    {
+        $receipt_id = $request->route('receipt_id');
+        $result = self::getReceipt($receipt_id,true,true);
+        if ($result != false) {
+            return json_encode($result);
+        }else{
+            return json_encode([
+                'receipt_id'=>$receipt_id,
+                'success'=>false
+            ]);
+        }
+    }
+
+
+
+
 
     public static function getReceipt($receipt_id = null,$wItems = false,$first = true)
     {
@@ -121,7 +176,8 @@ class ReceiptController extends Controller
                 'id',
                 'tdate',
                 'vendor', 
-                'total'
+                'total',
+                'action'
             ],
             'vendor',
             null,
@@ -130,8 +186,10 @@ class ReceiptController extends Controller
 
 		$data = array();
 		foreach ($result['result'] as $key => $receipt) {
-			$nestedData = array();
-			$nestedData[] = $receipt['id'];
+            $nestedData = array();
+            $receipt_id = $receipt['id'];
+
+			$nestedData[] = $receipt_id;
             // $nestedData[] = date_format($receipt['tdate'],"Y/m/d h:i A");
 
             $tDate = strtotime($receipt['tdate']);
@@ -141,14 +199,16 @@ class ReceiptController extends Controller
             $nestedData[] = "₱ " . $receipt['total'];
             // $nestedData[] = date_format($receipt['created_at'],"Y/m/d h:i A");
 
-            // $route = route('edit-notebook');
+            $route = route('edit-notebook',['receipt_id'=>$receipt_id]);
 
-        //     $editAction = "<a href='$route' class='btn btn-primary btn-icon-split btn-sm'>
-        //     <span class='icon text-white-50'>
-        //       <i class='fas fa-edit'></i>
-        //     </span>
-        //     <span class='text'>Edit Item</span>
-        //   </a>";
+            $editAction = "<a href='$route' class='btn btn-primary btn-icon-split btn-sm'>
+            <span class='icon text-white-50'>
+              <i class='fas fa-edit'></i>
+            </span>
+            <span class='text'>Edit Receipt</span>
+          </a>";
+
+          $nestedData[] = $editAction;
 
 
 			$data[] = $nestedData;

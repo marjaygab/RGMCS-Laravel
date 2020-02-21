@@ -35,17 +35,31 @@ class ItemCatalogController extends Controller
     }
 
 
+    public function getOptionsStringRequest(Request $request)
+    {
+        $itemno = $request->get('itemno');
+        $response = array();
+
+        $string = self::generateOptionString($itemno);
+
+        return json_encode([
+            "optionsString"=>$string
+        ]);
+    }
+
+
     public static function generateOptionString($itemno=null){
 
         $items = self::getItems($itemno);
+        $allItems = self::getItems();
         if ($itemno == null) {
             $string = "<option value ='0' disabled selected>--Select Item--</option>";
-            foreach ($items as $key => $value) {
+            foreach ($allItems as $key => $value) {
                 $string .= "<option value = '$value->id'>$value->itemdesc</option>";
             }
         } else {
             $string = "<option value ='0' disabled>--Select Unit--</option>";
-            foreach ($items as $key => $value) {
+            foreach ($allItems as $key => $value) {
                 if ($value->id == $itemno) {
                     $string .= "<option value = '$value->id' selected>$value->itemdesc</option>";
                 } else{
