@@ -7,6 +7,7 @@ $(document).ready(function () {
 	var defaultSelection = "RENES_ENCODER";
 
 	var deviceCode = $('#deviceCode').html();
+	var accessLevel = $('#accessLevel').html();
 
 	var selectedReceipt;
 	var stocksColumnDefs;
@@ -14,11 +15,21 @@ $(document).ready(function () {
 	var toDate;
 
 
+	
+	startTimer();
+
 	var stocksColumnDefsDefault = [
 		{"width": "30%", "targets": [1,6]},
 		{"className": "text-center", "targets": [0,1,2,3,4,5,6]},
 		{"orderable":false,"targets":[4,5,6]},
 		{ "width": "10%", "targets": [3,4,6] }
+	];
+
+	var stocksColumnDefsDefaultReadOnly = [
+		{"width": "30%", "targets": [1]},
+		{"className": "text-center", "targets": [0,1,2,3,4,5]},
+		{"orderable":false,"targets":[4,5]},
+		{ "width": "10%", "targets": [3,4] }
 	];
 
 	var stocksColumnDefsWarehouse = [
@@ -31,13 +42,19 @@ $(document).ready(function () {
 	if (deviceCode == "WAREHOUSE_ENCODER") {
 		stocksColumnDefs = stocksColumnDefsWarehouse;
 	}else{
-		stocksColumnDefs = stocksColumnDefsDefault;
+		if (accessLevel == "INVENTORY") {
+			stocksColumnDefs = stocksColumnDefsDefaultReadOnly;
+		}else{
+			stocksColumnDefs = stocksColumnDefsDefault;
+		}
 	}
 
 
 	if (parsePath("/RGMCS-Laravel/public/","") == "/notebook") {
 		$('#receiptItemsTable').DataTable();
 	}
+
+	
 
 
 
@@ -68,6 +85,19 @@ $(document).ready(function () {
 		"processing": true,
 		"order": [1, 'asc'],
 		"serverSide": true,
+		dom: "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6 float-right'f>>" +
+		"<'row'<'col-sm-12'tr>>" +
+		"<'row'<'col-sm-12 col-md-5'B><'col-sm-12 col-md-5'p><'col-sm-12 col-md-2 float-right'i>>",
+		buttons: [
+			{ 
+				"extend": 'print', 
+				"text":'Export',
+				"className": 'btn btn-info btn-xs float-right' ,
+				"exportOptions":{
+					"columns":[0,1,2]
+				}
+			}
+		],
 		"columnDefs": [
 			{"className":"text-center","targets":[0,1,2,3]},
 			{"orderable":false,"targets":[3]}
@@ -104,6 +134,19 @@ $(document).ready(function () {
 		"processing": true,
 		"order": [1, 'asc'],
 		"serverSide": true,
+		dom: "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6 float-right'f>>" +
+		"<'row'<'col-sm-12'tr>>" +
+		"<'row'<'col-sm-12 col-md-5'B><'col-sm-12 col-md-5'p><'col-sm-12 col-md-2 float-right'i>>",
+		buttons: [
+			{ 
+				"extend": 'print', 
+				"text":'Export',
+				"className": 'btn btn-info btn-xs float-right' ,
+				"exportOptions":{
+					"columns":[0,1,2,3]
+				}
+			}
+		],
 		"columnDefs": [
 			{"className":"text-center","targets":[0,1,2,3,4]},
 			{"orderable":false,"targets":[4]}
@@ -139,6 +182,12 @@ $(document).ready(function () {
 		"processing": true,
 		"order": [1, 'asc'],
 		"serverSide": true,
+		dom: "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6 float-right'f>>" +
+		"<'row'<'col-sm-12'tr>>" +
+		"<'row'<'col-sm-12 col-md-5'B><'col-sm-12 col-md-5'p><'col-sm-12 col-md-2 float-right'i>>",
+		buttons: [
+			{ "extend": 'print', "text":'Export',"className": 'btn btn-info btn-xs float-right' }
+		],
 		"columnDefs": [
 			{"className":"text-center","targets":[0,1,2,3,4]},
 			{"orderable":false,"targets":[4]}
@@ -199,18 +248,25 @@ $(document).ready(function () {
 	});
 
 	$('#stocksOverviewTable').DataTable({
-		"lengthMenu": [10, 25, 50, 75, 100],
+		"lengthMenu": [10, 25, 50, 75, 100,250,500],
 		"pageLength": 10,
 		"responsive": true,
 		"processing": true,
 		"order": [1, 'asc'],
 		"serverSide": true,
 		"columnDefs": stocksColumnDefs,
+		dom: "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6 float-right'f>>" +
+		"<'row'<'col-sm-12'tr>>" +
+		"<'row'<'col-sm-12 col-md-5'B><'col-sm-12 col-md-5'p><'col-sm-12 col-md-2 float-right'i>>",
+		buttons: [
+			{ "extend": 'print', "text":'Export',"className": 'btn btn-info btn-xs float-right' }
+		],
 		"ajax": {
 			url: (base_url + "/fetchstocks"),
 			type: "post",
 			headers: {
-				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+				'AccessLevel': accessLevel
 			}
 		}, "initComplete": function () {
 			var input = $('.dataTables_filter input').unbind(),
@@ -240,6 +296,19 @@ $(document).ready(function () {
 		"order": [1, 'asc'],
 		"serverSide": true,
 		"info":false,
+		dom: "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6 float-right'f>>" +
+		"<'row'<'col-sm-12'tr>>" +
+		"<'row'<'col-sm-12 col-md-5'B><'col-sm-12 col-md-5'p><'col-sm-12 col-md-2 float-right'i>>",
+		buttons: [
+			{ 
+				"extend": 'print', 
+				"text":'Export',
+				"className": 'btn btn-info btn-xs float-right' ,
+				"exportOptions":{
+					"columns":[0,1,2,3,4,5,6]
+				}
+			}
+		],
 		"columnDefs": [
 			{"orderable":false , "targets":[3,4,5,6,7]},
 			{ "width": "10%", "targets": [3,4,6] }
@@ -284,6 +353,12 @@ $(document).ready(function () {
 		"processing": true,
 		"order": [[10, 'desc']],
 		"serverSide": true,
+		dom: "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6 float-right'f>>" +
+		"<'row'<'col-sm-12'tr>>" +
+		"<'row'<'col-sm-12 col-md-5'B><'col-sm-12 col-md-5'p><'col-sm-12 col-md-2 float-right'i>>",
+		buttons: [
+			{ "extend": 'print', "text":'Export',"className": 'btn btn-info btn-xs float-right' }
+		],
 		"columnDefs": [
 			{ className: "costColumnContent", "targets": [5] },
 			{"className": "text-center", "targets": [0,1,2,3,4,5,6,7,8,9,10]},
@@ -319,6 +394,16 @@ $(document).ready(function () {
 		"processing": true,
 		"order": [[10, 'desc']],
 		"serverSide": true,
+		dom: "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6 float-right'f>>" +
+		"<'row'<'col-sm-12'tr>>" +
+		"<'row'<'col-sm-12 col-md-5'B><'col-sm-12 col-md-5'p><'col-sm-12 col-md-2 float-right'i>>",
+		buttons: [
+			{ 
+				"extend": 'print', 
+				"text":'Export',
+				"className": 'btn btn-info btn-xs float-right' 
+			}
+		],
 		"columnDefs": [
 			{ className: "costColumnContent", "targets": [5] }
 		],
@@ -367,106 +452,67 @@ $(document).ready(function () {
 
 	var receiptItemsTable;
 	var receiptItemsOverviewTable;
-	$.ajax({
-		"method":"GET",
-		"url": (base_url + "/receipt-info/ranges"),
-		"success":function(result) {
-			resultObject = JSON.parse(result);
 
-			fromDateString = resultObject.from;
-			toDateString = resultObject.to;
-
-			fromDate = new Date(fromDateString);
-			toDate = new Date(toDateString);
-
-			$('.input-daterange').datepicker({
-				"format":"yyyy-mm-dd"
-			});
-		
-			$('.input-daterange input').each(function(index) {
-				if (index == 0) {
-					$(this).datepicker('setDate',fromDate);
-					$(this).datepicker().on('changeDate',function(e) {
-						fromDateString = formatDate(e.date);
-						$('#receiptsTable').DataTable().ajax.reload();
-						$('#receiptItemsOverviewTable').DataTable().ajax.reload();
-					});
-				}else{
-					$(this).datepicker('setDate',toDate);
-					$(this).datepicker().on('changeDate',function(e) {
-						toDateString = formatDate(e.date);
-						$('#receiptsTable').DataTable().ajax.reload();
-						$('#receiptItemsOverviewTable').DataTable().ajax.reload();
-					});
-				}
-			});
-
-			var receiptsTable = $('#receiptsTable').DataTable({
-				"lengthMenu": [10, 25, 50, 75, 100],
-				"pageLength": 10,
-				"responsive": true,
-				"processing": true,
-				"serverSide": true,
-				"columnDefs": [
-					{"className": "text-center", "targets": [0,1,2,3]}
-				],
-				"ajax": {
-					// url: (base_url + parsePath("/RGMCS-Laravel/public/transaction/view/","/fetchtransactions")),
-					url: (base_url + "/fetchreceipts"),
-					type: "post",
-					headers: {
-						'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-					},
-					data:function ( d ) {
-						d.fromDate = fromDateString;
-						d.toDate = toDateString;
-					}
-				}, 
-				"initComplete": function () {
-					var input = $('.dataTables_filter input').unbind(),
-						self = this.api(),
-						$searchButton = $('<button class="btn btn-primary btn-sm ml-1">')
-							.text('Search')
-							.click(function () {
-								self.search(input.val()).draw();
-							}),
-						$clearButton = $('<button class="btn btn-danger btn-sm ml-1">')
-							.text('Reset')
-							.click(function () {
-								input.val('');
-								$searchButton.click();
-							})
-					$('.dataTables_filter').append($searchButton, $clearButton);
-		
-		
-				}
-			}).on('init.dt',function() {
-				receiptItemsTable = $('#receiptItemsTable').DataTable({
-					"searching":false,
-					"paging":false,
-					"info":false,
-					"columnDefs": [
-						{"className": "text-center", "targets": [0,1,2,3,4,5,6]},
-						{"width":"5%","targets":[2,3,4,5]},
-						// {"width":"15%","targets":[6]},
-						// {"width":"15%","targets":[1]}
-		
-					]
+	if (parsePath("/RGMCS-Laravel/public/","") == "/notebook/view") {
+		$.ajax({
+			"method":"GET",
+			"url": (base_url + "/receipt-info/ranges"),
+			"success":function(result) {
+				resultObject = JSON.parse(result);
+	
+				fromDateString = resultObject.from;
+				toDateString = resultObject.to;
+	
+				fromDate = new Date(fromDateString);
+				toDate = new Date(toDateString);
+	
+				$('.input-daterange').datepicker({
+					"format":"yyyy-mm-dd"
 				});
-		
-				receiptItemsOverviewTable = $('#receiptItemsOverviewTable').DataTable({
+			
+				$('.input-daterange input').each(function(index) {
+					if (index == 0) {
+						$(this).datepicker('setDate',fromDate);
+						$(this).datepicker().on('changeDate',function(e) {
+							fromDateString = formatDate(e.date);
+							$('#receiptsTable').DataTable().ajax.reload();
+							$('#receiptItemsOverviewTable').DataTable().ajax.reload();
+						});
+					}else{
+						$(this).datepicker('setDate',toDate);
+						$(this).datepicker().on('changeDate',function(e) {
+							toDateString = formatDate(e.date);
+							$('#receiptsTable').DataTable().ajax.reload();
+							$('#receiptItemsOverviewTable').DataTable().ajax.reload();
+						});
+					}
+				});
+	
+				var receiptsTable = $('#receiptsTable').DataTable({
 					"lengthMenu": [10, 25, 50, 75, 100],
 					"pageLength": 10,
 					"responsive": true,
 					"processing": true,
 					"serverSide": true,
 					"columnDefs": [
-						{"className": "text-center", "targets": [0,1,2,3,10]},
-						{"width":"5%","targets":[1]}
+						{"className": "text-center", "targets": [0,1,2,3]}
+					],
+					dom: "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6 float-right'f>>" +
+					"<'row'<'col-sm-12'tr>>" +
+					"<'row'<'col-sm-12 col-md-5'B><'col-sm-12 col-md-5'p><'col-sm-12 col-md-2 float-right'i>>",
+					buttons: [
+						{ 
+							"extend": 'print', 
+							"text":'Export',
+							"className": 'btn btn-info btn-xs float-right' ,
+							"exportOptions":{
+								"columns":[0,1,2,3]
+							}
+						}
 					],
 					"ajax": {
 						// url: (base_url + parsePath("/RGMCS-Laravel/public/transaction/view/","/fetchtransactions")),
-						url: (base_url + "/fetchreceiptitemsoverview"),
+						url: (base_url + "/fetchreceipts"),
 						type: "post",
 						headers: {
 							'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -475,8 +521,9 @@ $(document).ready(function () {
 							d.fromDate = fromDateString;
 							d.toDate = toDateString;
 						}
-					}, "initComplete": function () {
-						var input = $('#receiptItemsOverviewTable_filter input').unbind(),
+					}, 
+					"initComplete": function () {
+						var input = $('.dataTables_filter input').unbind(),
 							self = this.api(),
 							$searchButton = $('<button class="btn btn-primary btn-sm ml-1">')
 								.text('Search')
@@ -489,133 +536,200 @@ $(document).ready(function () {
 									input.val('');
 									$searchButton.click();
 								})
-						$('#receiptItemsOverviewTable_filter').append($searchButton, $clearButton);
+						$('.dataTables_filter').append($searchButton, $clearButton);
+			
+			
 					}
-				}).on('draw.dt',function() {
-					$('.receipt-items-edit').on('click',function() {
-						var receipt_item_no = $(this).attr('value');
-						var receipt_no = $(this).attr('receipt-no');
-						$.ajax({
-							"method":"GET",
-							"url": (base_url + "/receipt-item"),
-							"data":{
-								"receipt_item_no":receipt_item_no
-							},
-							"success":function(result) {
-								resultObject = JSON.parse(result);
-								$.ajax({
-									"method":"GET",
-									"url": (base_url + "/items/options"),
-									"data":{
-										"itemno":resultObject.itemno
-									},
-									"success":function(result) {
-										resultString = JSON.parse(result);
-										
-										$('#receiptId.modal-field').val(receipt_no);
-										$('#receiptItemNo.modal-field').val(receipt_item_no);
-										$('#itemsSelection.modal-field').html(resultString.optionsString);
-										$('#basePrice.modal-field').val(resultObject.baseprice);
-										$('#discount1.modal-field').val(resultObject.d1);
-										$('#discount2.modal-field').val(resultObject.d2);
-										$('#discount3.modal-field').val(resultObject.d3);
-										$('#discount4.modal-field').val(resultObject.d4);
-										$('#netPrice.modal-field').val(resultObject.netprice);
-
-										var currentBasePrice = resultObject.baseprice;
-										var currentD1 = resultObject.d1;
-										var currentD2 = resultObject.d2;
-										var currentD3 = resultObject.d3;
-										var currentD4 = resultObject.d4;
-										var currentNetPrice = resultObject.netprice;
-
-
-										var showComputed = function() {
-											$('#netPrice.modal-field').val(computeNetPrice(
-												currentBasePrice,
-												currentD1,
-												currentD2,
-												currentD3,
-												currentD4,
-											));
-										}
-
-										$('#basePrice.modal-field').on('change',function() {
-											currentBasePrice = $(this).val();
-											showComputed();
-										});
-										$('#discount1.modal-field').on('change',function() {
-											currentD1 = $(this).val();
-											showComputed();
-										});
-										$('#discount2.modal-field').on('change',function() {
-											currentD2 = $(this).val();
-											showComputed();
-										});
-										$('#discount3.modal-field').on('change',function() {
-											currentD3 = $(this).val();
-											showComputed();
-										});
-										$('#discount4.modal-field').on('change',function() {
-											currentD4 = $(this).val();
-											showComputed();
-										});
-
-									}
-								});
+				}).on('init.dt',function() {
+					receiptItemsTable = $('#receiptItemsTable').DataTable({
+						"searching":false,
+						"paging":false,
+						"info":false,
+						"columnDefs": [
+							{"className": "text-center", "targets": [0,1,2,3,4,5,6]},
+							{"width":"5%","targets":[2,3,4,5]},
+							// {"width":"15%","targets":[6]},
+							// {"width":"15%","targets":[1]}
+			
+						]
+					});
+			
+					receiptItemsOverviewTable = $('#receiptItemsOverviewTable').DataTable({
+						"lengthMenu": [10, 25, 50, 75, 100],
+						"pageLength": 10,
+						"responsive": true,
+						"processing": true,
+						"serverSide": true,
+						"columnDefs": [
+							{"className": "text-center", "targets": [0,1,2,3,10]},
+							{"width":"5%","targets":[1]}
+						],
+						dom: "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6 float-right'f>>" +
+						"<'row'<'col-sm-12'tr>>" +
+						"<'row'<'col-sm-12 col-md-5'B><'col-sm-12 col-md-5'p><'col-sm-12 col-md-2 float-right'i>>",
+						buttons: [
+							{ 
+								"extend": 'print', 
+								"text":'Export',
+								"className": 'btn btn-info btn-xs float-right' ,
+								"exportOptions":{
+									"columns":[0,1,2,3,4,5,6,7,8,9]
+								}
 							}
+						],
+						"ajax": {
+							// url: (base_url + parsePath("/RGMCS-Laravel/public/transaction/view/","/fetchtransactions")),
+							url: (base_url + "/fetchreceiptitemsoverview"),
+							type: "post",
+							headers: {
+								'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+							},
+							data:function ( d ) {
+								d.fromDate = fromDateString;
+								d.toDate = toDateString;
+							}
+						}, "initComplete": function () {
+							var input = $('#receiptItemsOverviewTable_filter input').unbind(),
+								self = this.api(),
+								$searchButton = $('<button class="btn btn-primary btn-sm ml-1">')
+									.text('Search')
+									.click(function () {
+										self.search(input.val()).draw();
+									}),
+								$clearButton = $('<button class="btn btn-danger btn-sm ml-1">')
+									.text('Reset')
+									.click(function () {
+										input.val('');
+										$searchButton.click();
+									})
+							$('#receiptItemsOverviewTable_filter').append($searchButton, $clearButton);
+						}
+					}).on('draw.dt',function() {
+						$('.receipt-items-edit').on('click',function() {
+							var receipt_item_no = $(this).attr('value');
+							var receipt_no = $(this).attr('receipt-no');
+							$.ajax({
+								"method":"GET",
+								"url": (base_url + "/receipt-item"),
+								"data":{
+									"receipt_item_no":receipt_item_no
+								},
+								"success":function(result) {
+									resultObject = JSON.parse(result);
+									$.ajax({
+										"method":"GET",
+										"url": (base_url + "/items/options"),
+										"data":{
+											"itemno":resultObject.itemno
+										},
+										"success":function(result) {
+											resultString = JSON.parse(result);
+											
+											$('#receiptId.modal-field').val(receipt_no);
+											$('#receiptItemNo.modal-field').val(receipt_item_no);
+											$('#itemsSelection.modal-field').html(resultString.optionsString);
+											$('#basePrice.modal-field').val(resultObject.baseprice);
+											$('#discount1.modal-field').val(resultObject.d1);
+											$('#discount2.modal-field').val(resultObject.d2);
+											$('#discount3.modal-field').val(resultObject.d3);
+											$('#discount4.modal-field').val(resultObject.d4);
+											$('#netPrice.modal-field').val(resultObject.netprice);
+	
+											var currentBasePrice = resultObject.baseprice;
+											var currentD1 = resultObject.d1;
+											var currentD2 = resultObject.d2;
+											var currentD3 = resultObject.d3;
+											var currentD4 = resultObject.d4;
+											var currentNetPrice = resultObject.netprice;
+	
+	
+											var showComputed = function() {
+												$('#netPrice.modal-field').val(computeNetPrice(
+													currentBasePrice,
+													currentD1,
+													currentD2,
+													currentD3,
+													currentD4,
+												));
+											}
+	
+											$('#basePrice.modal-field').on('change',function() {
+												currentBasePrice = $(this).val();
+												showComputed();
+											});
+											$('#discount1.modal-field').on('change',function() {
+												currentD1 = $(this).val();
+												showComputed();
+											});
+											$('#discount2.modal-field').on('change',function() {
+												currentD2 = $(this).val();
+												showComputed();
+											});
+											$('#discount3.modal-field').on('change',function() {
+												currentD3 = $(this).val();
+												showComputed();
+											});
+											$('#discount4.modal-field').on('change',function() {
+												currentD4 = $(this).val();
+												showComputed();
+											});
+	
+										}
+									});
+								}
+							});
 						});
 					});
-				});
-			}).on('click','tr', function() {
-		
-				if ($(this).hasClass('table-primary')) {
-					$(this).removeClass('table-primary');
-				}else{
-					receiptsTable.$('tr.table-primary').removeClass('table-primary');
-					$(this).toggleClass('table-primary');
-				}
-				
-				if (receiptsTable.$('tr.table-primary').length == 0) {
-					console.log("Nothing is Selected");
-				} else {
-					console.log("Something is Selected");
-				}
-				
-				selectedRow = receiptsTable.row(this).data();
-		
-				$.ajax({
-					"method":"GET",
-					"url": (base_url + "/notebook/view/receipt"),
-					"data":{
-						"receipt_no":selectedRow[0]
-					},
-					"success":function(result) {
-						resultObject = JSON.parse(result);
-		
-						receipt = resultObject.receipt;
-						receiptItems = resultObject.receipt_items;
-						receiptItemsTable.clear().draw();
-						$('#supplierName').html(receipt.vendor);
-						$('#transactionDateView').html(receipt.tdate);
-						$('#total-label').html(receipt.total);
-						receiptItems.forEach(item => {
-							receiptItemsTable.row.add([
-								item.itemdesc,
-								item.baseprice,
-								item.d1,
-								item.d2,
-								item.d3,
-								item.d4,
-								item.netprice
-							]).draw(false);
-						});
+				}).on('click','tr', function() {
+			
+					if ($(this).hasClass('table-primary')) {
+						$(this).removeClass('table-primary');
+					}else{
+						receiptsTable.$('tr.table-primary').removeClass('table-primary');
+						$(this).toggleClass('table-primary');
 					}
+					
+					if (receiptsTable.$('tr.table-primary').length == 0) {
+						console.log("Nothing is Selected");
+					} else {
+						console.log("Something is Selected");
+					}
+					
+					selectedRow = receiptsTable.row(this).data();
+			
+					$.ajax({
+						"method":"GET",
+						"url": (base_url + "/notebook/view/receipt"),
+						"data":{
+							"receipt_no":selectedRow[0]
+						},
+						"success":function(result) {
+							resultObject = JSON.parse(result);
+			
+							receipt = resultObject.receipt;
+							receiptItems = resultObject.receipt_items;
+							receiptItemsTable.clear().draw();
+							$('#supplierName').html(receipt.vendor);
+							$('#transactionDateView').html(receipt.tdate);
+							$('#total-label').html(receipt.total);
+							receiptItems.forEach(item => {
+								receiptItemsTable.row.add([
+									item.itemdesc,
+									item.baseprice,
+									item.d1,
+									item.d2,
+									item.d3,
+									item.d4,
+									item.netprice
+								]).draw(false);
+							});
+						}
+					});
+			
 				});
-		
-			});
-		}
-	});
+			}
+		});
+	}
 
 
 
@@ -684,6 +798,14 @@ $(document).ready(function () {
 		});
 
 		return net.toFixed(2);
+	}
+
+	function startTimer() {
+		$('#dateTimeDisplay').html(moment().format('MMMM Do YYYY, h:mm:ss a'));
+		var timer = setTimeout(
+			startTimer,
+			1000
+		);
 	}
 
 

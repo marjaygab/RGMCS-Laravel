@@ -20,4 +20,8 @@ class Items{
         this.d4 = d4;
         this.netprice = netprice;
     }
+
+    setReceiptItemIndex(receiptItemIndex){
+        this.receiptItemIndex = receiptItemIndex;
+    }
 }

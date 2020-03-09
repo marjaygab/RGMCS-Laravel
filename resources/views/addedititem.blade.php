@@ -1,6 +1,8 @@
 
 @extends('main.layout',['current_user'=>session()->get('current_user')])
 
+@section('title',"Items")
+
 @section('sidebar_menu')
     {{view('sidebars.adminsidebar')}}
 @endsection

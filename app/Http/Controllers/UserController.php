@@ -55,7 +55,34 @@ class UserController extends Controller
         }
     }
 
+
+    public static function checkLoggedIn()
+    {
+        $checkParameters = [    
+            session()->has('loggedInUserId'),
+            session()->has('loggedInUserName'),
+            session()->has('loggedInUserAccessLevelId'),
+            session()->has('loggedInUserAccessLevelCode')
+        ];
+
+        
+        foreach ($checkParameters as $param) {
+            if (!$param) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+
     public function logoutUser(Request $request)
+    {
+        UserController::logout();
+        return redirect('/');
+    }
+
+    public static function logout()
     {
         session()->forget('current_user');
         session()->forget('loggedInUserId');
@@ -63,7 +90,6 @@ class UserController extends Controller
         session()->forget('loggedInUserAccessLevelId');
         session()->forget('loggedInUserAccessLevelCode');
         session()->flush();
-        return redirect('/');
     }
     
 }

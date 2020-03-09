@@ -1,5 +1,9 @@
 @extends('main.layout')
 
+
+@section('title',"Backup")
+
+
 @section('sidebar_menu')
     @switch(Session::get('loggedInUserAccessLevelCode'))
         @case('ADMIN')

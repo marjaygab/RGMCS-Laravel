@@ -1,6 +1,10 @@
 
 @extends('main.layout',['current_user'=>session()->get('current_user')])
 
+
+@section('title',"Vendor")
+
+
 @section('sidebar_menu')
     {{view('sidebars.adminsidebar')}}
 @endsection

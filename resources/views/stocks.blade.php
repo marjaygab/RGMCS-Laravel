@@ -1,8 +1,14 @@
 
 @extends('main.layout',['current_user'=>session()->get('current_user')])
 
+@section('title',"Stocks")
+
 @section('sidebar_menu')
-    {{view('sidebars.encodersidebar')}}
+    @if (Session::get('loggedInUserAccessLevelCode') == "INVENTORY")
+        {{view('sidebars.inventorysidebar')}}          
+    @else
+        {{view('sidebars.encodersidebar')}}    
+    @endif
 @endsection
 
 
@@ -36,7 +42,9 @@
                                         <th>Warehouse Stocks</th>
                                     @endif
                                     <th>Unit Cost</th>
+                                    @if (Session::get('loggedInUserAccessLevelCode') != "INVENTORY")
                                     <th>Action</th>
+                                    @endif
                                 </tr>
                             </thead>
                             <tbody>

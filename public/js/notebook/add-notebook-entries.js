@@ -23,6 +23,7 @@ $(document).ready(function () {
         
     
         var toUpdateIndex = null;
+        var ToUpdateReceiptIndex = null;
     
         $('.input-group.date').datepicker({
             orientation: "bottom"
@@ -52,26 +53,27 @@ $(document).ready(function () {
                 success: function (result) {
                     var responseBody = JSON.parse(result);
                     var receipt = responseBody.receipt;
-                    var receiptItems = responseBody.receipt_items;
+                    var receiptItems = responseBody.receipt_items;                    
 
                     myReceipt = new Receipt(receipt.tdate,receipt.vid,receipt.vendor);
                     
                     receiptItems.forEach(item => {
-                        myReceipt.addItem(
-                            new Items(
-                                item.itemno,
-                                item.itemdesc,
-                                item.baseprice,
-                                item.d1,
-                                item.d2,
-                                item.d3,
-                                item.d4,
-                                item.netprice
-                            )
+                        tempItem = new Items(
+                            item.itemno,
+                            item.itemdesc,
+                            item.baseprice,
+                            item.d1,
+                            item.d2,
+                            item.d3,
+                            item.d4,
+                            item.netprice
                         );
+                        tempItem.setReceiptItemIndex(item.id);
+                        myReceipt.addItem(tempItem);
+
                     });
                     myReceipt.setTotalNetPrice();
-                    
+                    myReceipt.setReceiptIndex(receipt_no);
 
                     $('#transactionDateView').html(myReceipt.getDate());
                     $('.input-group.date').datepicker("setDate", new Date(myReceipt.getDate()));
@@ -79,6 +81,8 @@ $(document).ready(function () {
                     $('#total-label').html(myReceipt.getTotalNetPrice());
                     $('#supplierName').html(myReceipt.getVendor())
                     $('#vendorSelection').val(myReceipt.getVid());
+                    
+                    console.log(myReceipt);
                     
                 },
                 error: function (error) {
@@ -243,11 +247,12 @@ $(document).ready(function () {
                 //POST to PHP
                 console.log(JSON.stringify(myReceipt));
                 $.ajax({
-                    url: 'notebook/new',
+                    url: base_url + '/notebook/new',
                     type: 'POST',
                     data:{
                         "_token": $('#token').val(),
-                        "receipts":myReceipt
+                        "receipts":myReceipt,
+                        "toUpdateReceiptIndex":ToUpdateReceiptIndex
                     },
                     success: function (result) {
                         var responseBody = result;

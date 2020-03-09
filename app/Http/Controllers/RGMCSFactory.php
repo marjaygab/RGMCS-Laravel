@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
@@ -150,6 +151,65 @@ class RGMCSFactory extends Controller
     public static function random($length = null)
     {
         return strtoupper(Str::random($length));
+    }
+
+    public static function countFromArray(Array $list , $condition)
+    {
+        $counter = 0;
+        foreach ($list as $item) {
+            if ($item == $condition) {
+                $counter++;
+            }
+        }
+        
+        return $counter;
+    }
+
+    public static function getGreetings($user = "")
+    {
+        $now = Carbon::now();
+        
+
+        $morningRange = [
+            "from"=>Carbon::create($now->year,$now->month,$now->day,0,0,0),
+            "to"=>Carbon::create($now->year,$now->month,$now->day,11,59,0),
+            "greeting"=>"Good Morning $user!",
+            "image"=>asset('img/undraw_morning_work.svg')
+        ];
+
+        $afterNoonRange = [
+            "from"=>Carbon::create($now->year,$now->month,$now->day,12,0,0),
+            "to"=>Carbon::create($now->year,$now->month,$now->day,16,59,0),
+            "greeting"=>"Good Afternoon $user!",
+            "image"=>asset('img/undraw_afternoon_work.svg')
+        ];
+
+        $eveningRange = [
+            "from"=>Carbon::create($now->year,$now->month,$now->day,17,0,0),
+            "to"=>Carbon::create($now->year,$now->month,$now->day,23,59,0),
+            "greeting"=>"Good Evening $user!",
+            "image"=>asset('img/undraw_evening_work.svg')
+        ];
+
+        $timeRanges = [
+            $morningRange,
+            $afterNoonRange,
+            $eveningRange
+        ];
+
+        foreach ($timeRanges as $range) {
+            if($now->between($range['from'],$range['to'])){
+                return [
+                    "greeting"=>$range['greeting'],
+                    "image"=>$range['image']
+                ];
+            }
+        }
+
+        return [
+            "greeting"=>"Good Day $user!",
+            "image"=>asset('img/undraw_morning_work.svg')
+        ];;
     }
 
 }

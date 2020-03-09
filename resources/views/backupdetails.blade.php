@@ -1,6 +1,9 @@
 <?php use \App\Http\Controllers\DatabaseHistoryController; ?>
 @extends('main.layout')
 
+@section('title',"Backup Details")
+
+
 @section('sidebar_menu')
     @switch(Session::get('loggedInUserAccessLevelCode'))
         @case('ADMIN')

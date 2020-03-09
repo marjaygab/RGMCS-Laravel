@@ -13,12 +13,19 @@ class StocksOverviewController extends Controller
     public function getAll(Request $request)
 	{
 		$stocksOverview = new StocksOverview();
+		$accessLevel = $request->header('AccessLevel');
+
+		if ($accessLevel == "INVENTORY") {
+			$columnDefs = ['itemno', 'itemdesc', 'unit_code','qty','price'];
+		}else{
+			$columnDefs = ['itemno', 'itemdesc', 'unit_code','qty','price', 'action'];
+		}
 
 		$result = DataTablesController::generateResult(
 			$request,
 			$stocksOverview,
 			env("DB_CONFIG_" . env('DEVICE_CODE') . "_DB"),
-			['itemno', 'itemdesc', 'unit_code','qty','price', 'action'],
+			$columnDefs,
 			'itemdesc'
 		);
 
@@ -61,8 +68,9 @@ class StocksOverviewController extends Controller
             </span>
             <span class='text'>View Transaction</span>
           </a>";
-
-			$nestedData[] = $editAction . $viewAction;
+			if ($accessLevel != "INVENTORY") {
+				$nestedData[] = $editAction . $viewAction;			  
+			}
 			$data[] = $nestedData;
 		}
 		return DataTablesController::generateJson(intval($request->post('draw')), intval($result['total']), intval($result['totalFiltered']), $data);

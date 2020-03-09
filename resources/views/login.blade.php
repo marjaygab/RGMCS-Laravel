@@ -41,7 +41,7 @@
 										</h1>
 											<div class="sidebar-brand-text"><?php echo env('BRANCH') . " Branch";?></div>
 									</div>
-									<form class="user" method="POST" action="{{route('authenticate')}}">
+									<form class="user" method="POST" action="{{route('authenticate-user')}}">
 										@csrf
 										@if ($errors->any())
 											<div class="alert alert-danger" role="alert">

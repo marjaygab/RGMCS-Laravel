@@ -2,6 +2,8 @@
 <?php use \App\Http\Controllers\DeviceController; ?>
 @extends('main.layout',['current_user'=>session()->get('current_user')])
 
+@section('title',"Transactions")
+
 @section('sidebar_menu')
     {{view('sidebars.adminsidebar')}}
 @endsection

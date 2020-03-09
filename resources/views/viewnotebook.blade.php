@@ -1,6 +1,9 @@
 <?php use \App\Http\Controllers\ItemCatalogController; ?>
 @extends('main.layout',['current_user'=>session()->get('current_user')])
 
+@section('title',"Notebook")
+
+
 @section('sidebar_menu')
     {{view('sidebars.adminsidebar')}}
 @endsection

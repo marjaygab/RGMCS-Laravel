@@ -2,6 +2,8 @@
 <?php use \App\Http\Controllers\CartController; ?>
 @extends('main.layout',['current_user'=>session()->get('current_user')])
 
+@section('title',"Cart")
+
 @section('sidebar_menu')
     {{view('sidebars.encodersidebar')}}
 @endsection

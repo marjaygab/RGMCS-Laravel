@@ -128,6 +128,10 @@ class Receipt{
         this.totalNetPrice = this.getTotalNetPrice();
     }
 
+    setReceiptIndex(receiptIndex){
+        this.receiptId = receiptIndex;
+    }
+
     updateItem(index,item){
         var toUpdateItem = this.getItemByIndex(index);
         if (toUpdateItem != false) {
