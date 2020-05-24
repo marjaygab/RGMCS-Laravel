@@ -6,6 +6,10 @@ $(document).ready(function() {
 
     var toggleView = $('#toggleView').bootstrapToggle();
 
+
+    console.log(costColumn);
+    console.log(costColumnContent);
+
     if (toggleButton != null && costColumn != null) {
         toggleButton.classList.add("btn-success");
         if (toggleState) {

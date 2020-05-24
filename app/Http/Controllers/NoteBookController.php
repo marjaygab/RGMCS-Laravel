@@ -49,12 +49,13 @@ class NoteBookController extends Controller
     public function newTransaction(Request $request)
     {
         $receipts = $request->post('receipts');
+        $receiptId = $request->post('receiptId');
         $receiptItems = $receipts['items'];
         $tDate = $receipts['tDate'];
         $vid = $receipts['vid'];
         $vendor = $receipts['vendor'];
         $total = $receipts['totalNetPrice'];
-        $ToUpdateReceiptIndex = $receipts['receiptId'];
+        $ToUpdateReceiptIndex = $receiptId;
 
 
         if ($ToUpdateReceiptIndex == null || $ToUpdateReceiptIndex == "") {

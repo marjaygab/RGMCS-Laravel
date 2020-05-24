@@ -26,14 +26,18 @@ class DataTablesController extends Controller
             $base = $partial;
 
             if ($additionalParam != null) {
+                
                 $result = $partial
-                ->orWhere($additionalParam)
+                ->orWhere([$additionalParam])
                 ->orderBy($columns[$request->post("order")[0]['column']],$request->post("order")[0]['dir'])
                 ->get();
+
+                
                 
                 $totalFiltered = $result->count();
 
                 $partial = $base->orWhere([$additionalParam]);
+
 
                 if ($whereBetween != null) {
                     $partial = $base->whereBetween($whereBetween[0],$whereBetween[1]);
@@ -87,12 +91,12 @@ class DataTablesController extends Controller
 
                 if ($whereBetween != null) {
                     $partial = $base->orWhereBetween($whereBetween[0],$whereBetween[1]);
-                    $result = $partial
-                    ->orderBy($columns[$request->post("order")[0]['column']],$request->post("order")[0]['dir'])
-                    ->get();
-                    $totalFiltered = $result->count();
-
                 }
+
+                $result = $partial
+                ->orderBy($columns[$request->post("order")[0]['column']],$request->post("order")[0]['dir'])
+                ->get();
+                $totalFiltered = $result->count();
 
                 $base = $partial;
             }else{

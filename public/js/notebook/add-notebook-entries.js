@@ -23,7 +23,7 @@ $(document).ready(function () {
         
     
         var toUpdateIndex = null;
-        var ToUpdateReceiptIndex = null;
+        var ToUpdateReceiptIndex = "";
     
         $('.input-group.date').datepicker({
             orientation: "bottom"
@@ -252,7 +252,7 @@ $(document).ready(function () {
                     data:{
                         "_token": $('#token').val(),
                         "receipts":myReceipt,
-                        "toUpdateReceiptIndex":ToUpdateReceiptIndex
+                        "receiptId":ToUpdateReceiptIndex
                     },
                     success: function (result) {
                         var responseBody = result;
@@ -372,7 +372,7 @@ $(document).ready(function () {
             net = base;
             discounts.forEach(element => {
                 if (element != 0) {
-                    net = net - (net * (element / 100))
+                    net = net + (net * (element / 100))
                 }
             });
     

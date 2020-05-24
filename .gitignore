@@ -1,7 +1,9 @@
 /node_modules
 /public/hot
 /public/storage
+/public/vendor
 /public/vendor/bootstrap-datepicker
+/storage
 /storage/*.key
 /vendor
 .env

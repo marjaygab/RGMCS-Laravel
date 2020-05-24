@@ -1,0 +1,22 @@
+php artisan migrate --path=./database/migrations/TABLES/rgmcs_references_db --database=mysql_references
+php artisan migrate --path=./database/migrations/TABLES/rgmcs_renes_admin_db --database=mysql_renes_admin
+php artisan migrate --path=./database/migrations/TABLES/rgmcs_renes_encoder_db --database=mysql_renes_encoder
+php artisan migrate --path=./database/migrations/TABLES/rgmcs_renes_cashier_db --database=mysql_renes_cashier
+php artisan migrate --path=./database/migrations/TABLES/rgmcs_redor_encoder_db --database=mysql_redor_encoder
+php artisan migrate --path=./database/migrations/TABLES/rgmcs_warehouse_encoder_db --database=mysql_warehouse_encoder
+php artisan migrate --path=./database/migrations/VIEWS/ --database=mysql_references
+php artisan migrate --path=./database/migrations/VIEWS/rgmcs_renes_encoder_db --database=mysql_renes_encoder
+php artisan migrate --path=./database/migrations/VIEWS/rgmcs_renes_cashier_db --database=mysql_renes_cashier
+php artisan migrate --path=./database/migrations/VIEWS/rgmcs_redor_encoder_db --database=mysql_redor_encoder
+php artisan migrate --path=./database/migrations/VIEWS/rgmcs_warehouse_encoder_db --database=mysql_warehouse_encoder
+php artisan migrate --path=./database/migrations/VIEWS/rgmcs_references_db --database=mysql_references
+php artisan migrate --path=./database/migrations/VIEWS/rgmcs_renes_admin_db --database=mysql_renes_admin
+
+
+
+
+
+
+
+
+

@@ -22,6 +22,10 @@
                                 </div>
                             @endif
             <div class="card shadow mb-4">
+                <div class="col-sm-2">
+                    <br>
+                    <button id="toggleButton" type='submit' class='btn' name='toggle' value=''>Toggle Unit Price</button>
+                </div>
                 <div class="card-header py-3">
                     <h6 class="m-0 font-weight-bold text-primary">Stocks</h6>
                 </div>
@@ -34,7 +38,7 @@
                                     <th rowspan="2" class="text-center" style="vertical-align : middle;text-align:center;">Description</th>
                                     <th rowspan="2" class="text-center" style="vertical-align : middle;text-align:center;">Unit</th>
                                     <th colspan="3" id="qtyHeader" class="text-center" style="vertical-align : middle;text-align:center;">Stocks On Hand</th>
-                                    <th rowspan="2" class="text-center" style="vertical-align : middle;text-align:center;">Unit Cost</th>
+                                    <th id="cost" rowspan="2" class="text-center" style="vertical-align : middle;text-align:center;">Unit Cost</th>
                                     <th rowspan="2" class="text-center" style="vertical-align : middle;text-align:center;">Action</th>
                                 </tr>
                                 <tr>

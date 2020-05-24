@@ -58,7 +58,7 @@ class VendorController extends Controller
         
     }
 
-    public static function getVendor($vid = null,$first = null)
+    public static function getVendor($vid = null,$first = null,$orderBy = null)
     {
         
         if ($vid == null) {
@@ -67,7 +67,7 @@ class VendorController extends Controller
             $parameters = ['id'=>$vid];
         }
 
-        $result = RGMCSFactory::fetchRows(new Vendor(),env('DB_CONFIG_REFERENCES'),$parameters,$first);
+        $result = RGMCSFactory::fetchRows(new Vendor(),env('DB_CONFIG_REFERENCES'),$parameters,$first,$orderBy);
 
         if ($result != null) {
             return $result;
@@ -118,7 +118,7 @@ class VendorController extends Controller
 
     public static function generateOptionString($vid=null){
 
-        $data = self::getVendor(null,null);
+        $data = self::getVendor(null,null,['vendor','ASC']);
 
         if ($vid == null) {
             $string = "<option value ='0' disabled selected>--Select Unit--</option>";

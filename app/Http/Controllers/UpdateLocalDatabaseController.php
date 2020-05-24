@@ -49,7 +49,8 @@ class UpdateLocalDatabaseController extends Controller
     public function setCommand()
     {
         if ($this->path != false) {
-            $this->command = env('LOAD_DUMP_PATH') . "/mysql" . " -u {$this->userName} {$this->dbName} < {$this->path}";
+            $this->command = env('LOAD_DUMP_PATH') . "/mysql.exe" . " --user={$this->userName} --password={$this->passWord} {$this->dbName} < {$this->path}";
+            // $this->command = env('LOAD_DUMP_PATH') . "/mysql" . " -u {$this->userName} {$this->dbName} < {$this->path}";
         }else{
             $this->command = false;
         }
@@ -91,7 +92,6 @@ class UpdateLocalDatabaseController extends Controller
         if ($this->command != false) {
             $process = Process::fromShellCommandline($this->command);
             $process->run();
-
             $newBackUpCode  = DatabaseHistoryController::getHistory($this->deviceCode);
 
             if ($newBackUpCode != $this->previousBackupCode) {
@@ -140,7 +140,7 @@ class UpdateLocalDatabaseController extends Controller
             $result = $updater->setDbName($dbName)
             ->setUserName(env('DB_USERNAME'))
             ->setPassWord(env('DB_PASSWORD'))
-            ->setPath(storage_path() . "/" . $dbName . ".sql")
+            ->setPath(env('STORAGE_PATH') . "/" . $dbName . ".sql")
             ->setCommand()
             ->run();
 

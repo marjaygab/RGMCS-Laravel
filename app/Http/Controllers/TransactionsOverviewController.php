@@ -164,7 +164,9 @@ class TransactionsOverviewController extends Controller
             $nestedData[] = date_format($transaction['created_at'],"Y/m/d h:i A");
 
 			$data[] = $nestedData;
-		}
+        }
+        
+        
 		return DataTablesController::generateJson(intval($request->post('draw')), intval($result['total']), intval($result['totalFiltered']), $data);
     }
     

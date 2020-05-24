@@ -77,7 +77,7 @@ class BackupDatabaseController extends Controller
             $dbName = strtolower("RGMCS_" . env('DEVICE_CODE') ."_DB");
         }
 
-        $handler = fopen(storage_path('credentials.txt'),"w+");
+        // $handler = fopen(storage_path('credentials.txt'),"w+");
 
         $client = MySql::create()
         ->setDbName($dbName)
@@ -85,15 +85,15 @@ class BackupDatabaseController extends Controller
         ->setPassword(env('DB_PASSWORD'))
         ->setDumpBinaryPath(env('LOAD_DUMP_PATH'));
 
-        $credentials = $client->getContentsOfCredentialsFile();
-        fwrite($handler,$credentials);
-        $temporaryCredentialsFile = stream_get_meta_data($handler)['uri'];
+        // $credentials = $client->getContentsOfCredentialsFile();
+        // fwrite($handler,$credentials);
+        $temporaryCredentialsFile = storage_path('credentials.txt');
 
-        $command = $client->getDumpCommand(storage_path() . "/" .  $dbName . ".sql",$temporaryCredentialsFile);
+        $command =$client->getDumpCommand(storage_path() . "/" .  $dbName . ".sql",$temporaryCredentialsFile);
+        
 
         $process = Process::fromShellCommandline($command,null,null,null);
-        $process->run();
-
+        $result = $process->run();
         
         if (file_exists(storage_path() . "/" .  $dbName . ".sql")) {
             return file_get_contents(storage_path() . "/" .  $dbName . ".sql");

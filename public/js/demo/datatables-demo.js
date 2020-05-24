@@ -311,7 +311,8 @@ $(document).ready(function () {
 		],
 		"columnDefs": [
 			{"orderable":false , "targets":[3,4,5,6,7]},
-			{ "width": "10%", "targets": [3,4,6] }
+			{ "width": "10%", "targets": [3,4,6] },
+			{ className: "costColumnContent", "targets": 6 }
 		],
 		"ajax": {
 			url: (base_url + "/fetchadminstocks"),

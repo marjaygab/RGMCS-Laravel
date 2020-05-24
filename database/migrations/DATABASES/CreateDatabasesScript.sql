@@ -1,0 +1,6 @@
+CREATE DATABASE rgmcs_references_db;
+CREATE DATABASE rgmcs_renes_admin_db;
+CREATE DATABASE rgmcs_renes_cashier_db;
+CREATE DATABASE rgmcs_renes_encoder_db;
+CREATE DATABASE rgmcs_warehouse_encoder_db;
+CREATE DATABASE rgmcs_redor_encoder_db;
