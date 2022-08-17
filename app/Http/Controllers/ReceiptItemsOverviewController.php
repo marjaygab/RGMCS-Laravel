@@ -24,27 +24,59 @@ class ReceiptItemsOverviewController extends Controller
             $toDate = $ranges->toDate;
         }
 
-        $result = DataTablesController::generateResult(
-            $request,
-            $receiptItemsOverview,
-            env("DB_CONFIG_RENES_ADMIN"),
-            [
-                'receipt_no',
-                'tdate', 
-                'vendor',
+        if($request->has('itemNo')){
+            $itemNo = $inputParams['itemNo'];
+        }else{
+            $itemNo = null;
+        }
+
+
+        if($itemNo != null){
+            $result = DataTablesController::generateResult(
+                $request,
+                $receiptItemsOverview,
+                env("DB_CONFIG_RENES_ADMIN"),
+                [
+                    'receipt_no',
+                    'tdate', 
+                    'vendor',
+                    'itemdesc',
+                    'baseprice',
+                    'd1',
+                    'd2',
+                    'd3',
+                    'd4',
+                    'netprice',
+                    'action'     
+                ],
                 'itemdesc',
-                'baseprice',
-                'd1',
-                'd2',
-                'd3',
-                'd4',
-                'netprice',
-                'action'     
-            ],
-            'itemdesc',
-            null,
-            ['tdate',[$fromDate,$toDate]]
-        );
+                ['itemno','=',$itemNo],
+                ['tdate',[$fromDate,$toDate]]
+            );
+        }else{
+            $result = DataTablesController::generateResult(
+                $request,
+                $receiptItemsOverview,
+                env("DB_CONFIG_RENES_ADMIN"),
+                [
+                    'receipt_no',
+                    'tdate', 
+                    'vendor',
+                    'itemdesc',
+                    'baseprice',
+                    'd1',
+                    'd2',
+                    'd3',
+                    'd4',
+                    'netprice',
+                    'action'     
+                ],
+                'itemdesc',
+                null,
+                ['tdate',[$fromDate,$toDate]]
+            );
+        }
+
 
 		$data = array();
 		foreach ($result['result'] as $key => $receipt) {

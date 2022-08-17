@@ -17,6 +17,10 @@
             <input id="toggleView" class="float-right" type="checkbox" data-toggle="toggle" data-on="Receipt" data-off="Items" name="toggleView">
         </div>
         <div class="col-sm-2">
+            <label for="toggleSelect" class="d-block">Is Aggregated?:</label>
+            <input id="toggleSelect" class="float-right" type="checkbox" data-toggle="toggle" data-on="Yes" data-off="No" name="toggleSelect">
+        </div>
+        <div class="col-sm-2">
             <label for="receiptDateRange">Search By Date:</label>
             <div id="receiptDateRange" class="input-group input-daterange" name="receiptDateRange">
                 <input type="text" class="form-control" value="">
@@ -24,6 +28,7 @@
                 <input type="text" class="form-control" value="">
             </div>
         </div>
+
     </div>
     <div id="receiptView" class="row">
         <div class="col-sm-6">
@@ -176,6 +181,39 @@
         </form>
     </div> --}}
     </div>
+
+
+    <div class="row" id="aggregatedItemsView">
+        <div class="col-sm-12">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Receipt Items</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="receiptItemsAggregatedTable" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>Item No</th>
+                                        <th>Item Description</th>
+                                        <th>Latest Transaction Date</th>
+                                        <th scope="col" class="text-center">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <div class="row" id="itemsView">
         <div class="col-sm-12">
             <div class="row">
@@ -210,6 +248,14 @@
                     </div>
                 </div>
             </div>
+
+
+
+
+
+
+
+
             <div class="modal fade" id="editReceiptItemModal" tabindex="-1" role="dialog" aria-labelledby="editReceiptItemModalLabel"
                 aria-hidden="true">
                 <form action="{{route('update-receipt-item')}}" method="POST">

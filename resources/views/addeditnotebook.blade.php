@@ -22,7 +22,7 @@
                             <div class="row">
                                 <div class="form-group col-sm-6">
                                     <label>Date of Transaction</label>
-                                    <div class="input-group date">
+                                    <div class="input-group date" id="datepicker">
                                         <input type="text" class="form-control"><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
                                     </div>
                                 </div>

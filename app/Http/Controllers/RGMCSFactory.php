@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class RGMCSFactory extends Controller
 {
@@ -114,7 +115,7 @@ class RGMCSFactory extends Controller
         $result = self::fetchRows($binModel,env('DB_CONFIG_REFERENCES'),$keyParam,true);
 
         if ($result != null) {
-            return back()->withErrors(['msg'=>'You already marked this item.']);
+            return back()->with(['errors'=>'You already marked this item.']);
         }else{
             $result = self::insertRows($binModel,env('DB_CONFIG_REFERENCES'),$parameters);
             if ($result > 0) {

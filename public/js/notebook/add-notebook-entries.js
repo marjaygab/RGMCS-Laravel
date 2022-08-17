@@ -1,11 +1,11 @@
-$(document).ready(function () {
+$(document).ready(function() {
 
-    var base_url = "http://localhost/RGMCS-Laravel/public";
-    currentPath = parsePath("/RGMCS-Laravel/public/","");
+    var base_url = "http://rgmcs-laravel.test";
+    currentPath = parsePath("/", "");
 
     console.log(currentPath);
-    
-    if (currentPath == "/notebook" || currentPath.includes("/notebook/edit",0)) {
+
+    if (currentPath == "/notebook" || currentPath.includes("/notebook/edit", 0)) {
 
         var vendorSelection = document.getElementById("vendorSelection");
         var itemsSelection = document.getElementById("itemsSelection");
@@ -17,22 +17,22 @@ $(document).ready(function () {
         var discount4 = document.getElementById('discount4');
         var supplierName = document.getElementById('supplierName');
         var transactionDateView = document.getElementById('transactionDateView');
-    
+
         var dataSource = [];
         var discountFields = [discount1, discount2, discount3, discount4];
-        
-    
+
+
         var toUpdateIndex = null;
         var ToUpdateReceiptIndex = "";
-    
+
         $('.input-group.date').datepicker({
             orientation: "bottom"
         });
-    
+
         $('.input-group.date').datepicker("setDate", new Date);
 
         var myReceipt = new Receipt($('#transactionDateView').html());
-    
+
         discount1.value = 0;
         discount2.value = 0;
         discount3.value = 0;
@@ -42,21 +42,21 @@ $(document).ready(function () {
         var dateSelected = new Date();
         var dateString = dateSelected.getFullYear() + "-" + minTwoDigits(dateSelected.getMonth() + 1) + "-" + minTwoDigits(dateSelected.getDate());
         $('#transactionDateView').html(dateString);
-    
 
-        if (currentPath.includes("/notebook/edit",0)) {
-            receipt_no = currentPath.replace("/notebook/edit/","");
-            
+
+        if (currentPath.includes("/notebook/edit", 0)) {
+            receipt_no = currentPath.replace("/notebook/edit/", "");
+
             $.ajax({
                 url: base_url + '/receipt/' + receipt_no,
                 type: 'GET',
-                success: function (result) {
+                success: function(result) {
                     var responseBody = JSON.parse(result);
                     var receipt = responseBody.receipt;
-                    var receiptItems = responseBody.receipt_items;                    
+                    var receiptItems = responseBody.receipt_items;
 
-                    myReceipt = new Receipt(receipt.tdate,receipt.vid,receipt.vendor);
-                    
+                    myReceipt = new Receipt(receipt.tdate, receipt.vid, receipt.vendor);
+
                     receiptItems.forEach(item => {
                         tempItem = new Items(
                             item.itemno,
@@ -81,11 +81,11 @@ $(document).ready(function () {
                     $('#total-label').html(myReceipt.getTotalNetPrice());
                     $('#supplierName').html(myReceipt.getVendor())
                     $('#vendorSelection').val(myReceipt.getVid());
-                    
+
                     console.log(myReceipt);
-                    
+
                 },
-                error: function (error) {
+                error: function(error) {
                     console.log(`Error: ${error}`);
                 }
             });
@@ -93,13 +93,13 @@ $(document).ready(function () {
         }
 
 
-    
+
         $('#receiptItemsTable').DataTable({
-            "data":dataSource
+            "data": dataSource
         });
-    
-    
-        $('#basePrice').on('change', function () {
+
+
+        $('#basePrice').on('change', function() {
             try {
                 base = parseFloat($(this).val());
                 if (Number.isNaN(base)) {
@@ -120,8 +120,8 @@ $(document).ready(function () {
                 toggleAddingControls(true);
             }
         });
-    
-        $('#discount1').on('change', function () {
+
+        $('#discount1').on('change', function() {
             try {
                 base = parseFloat($('#basePrice').val());
                 discount = parseInt($(this).val());
@@ -136,7 +136,7 @@ $(document).ready(function () {
                 netPrice.value = computeNetPrice(base, discount, discount2.value, discount3.value, discount4.value);
             }
         });
-        $('#discount2').on('change', function () {
+        $('#discount2').on('change', function() {
             try {
                 base = parseFloat($('#basePrice').val());
                 discount = parseInt($(this).val());
@@ -152,7 +152,7 @@ $(document).ready(function () {
                 netPrice.value = computeNetPrice(base, discount1.value, discount, discount3.value, discount4.value);
             }
         });
-        $('#discount3').on('change', function () {
+        $('#discount3').on('change', function() {
             try {
                 base = parseFloat($('#basePrice').val());
                 discount = parseInt($(this).val());
@@ -167,7 +167,7 @@ $(document).ready(function () {
                 netPrice.value = computeNetPrice(base, discount1.value, discount2.value, discount, discount4.value);
             }
         });
-        $('#discount4').on('change', function () {
+        $('#discount4').on('change', function() {
             try {
                 base = parseFloat($('#basePrice').val());
                 discount = parseInt($(this).val());
@@ -182,26 +182,26 @@ $(document).ready(function () {
                 netPrice.value = computeNetPrice(base, discount1.value, discount2.value, discount3.value, discount);
             }
         });
-    
-    
-    
-    
-        $('#vendorSelection').on('change', function () {
+
+
+
+
+        $('#vendorSelection').on('change', function() {
             myReceipt.setVendor($(this).val(), $('#vendorSelection option:selected').text());
             supplierName.innerHTML = $('#vendorSelection option:selected').text();
         });
-    
-    
-        $('.input-group.date').datepicker().on('changeDate', function (e) {
+
+
+        $('.input-group.date').datepicker().on('changeDate', function(e) {
             dateSelected = new Date(e.date);
             dateString = dateSelected.getFullYear() + "-" + minTwoDigits(dateSelected.getMonth() + 1) + "-" + minTwoDigits(dateSelected.getDate());
             myReceipt.tDate = dateString;
             $('#transactionDateView').html(dateString);
         })
-    
-    
-    
-        $('#addItemButton').click(function () {
+
+
+
+        $('#addItemButton').click(function() {
             //validate first before submitting
             var tdate = dateString;
             var vid = $('#vendorSelection').val();
@@ -218,13 +218,13 @@ $(document).ready(function () {
                 $('#itemListContainer').html(myReceipt.generate());
                 myReceipt.setTotalNetPrice();
                 $('#total-label').html(myReceipt.getTotalNetPrice());
-            }else if($(this).val() == "Save"){
-                myReceipt.updateItem(toUpdateIndex,new Items(itemno, itemdesc, base, d1, d2, d3, d4, net));
+            } else if ($(this).val() == "Save") {
+                myReceipt.updateItem(toUpdateIndex, new Items(itemno, itemdesc, base, d1, d2, d3, d4, net));
                 $('#itemListContainer').html(myReceipt.generate());
                 myReceipt.setTotalNetPrice();
                 $('#total-label').html(myReceipt.getTotalNetPrice());
                 toUpdateIndex = null;
-                $('.control').prop('disabled',false);
+                $('.control').prop('disabled', false);
                 $(this).val('Add Item');
                 $('tr.bg-info').toggleClass('table-info');
 
@@ -237,47 +237,47 @@ $(document).ready(function () {
                 $('#discount4').val(0);
                 toggleAddingControls(true);
             }
-    
+
         });
-    
-        $('#submitButton').on('click',function() {
+
+        $('#submitButton').on('click', function() {
             if (myReceipt.getItems().length <= 0) {
                 alert("No Items added. Please add a/an item/s to continue.");
-            }else{
+            } else {
                 //POST to PHP
                 console.log(JSON.stringify(myReceipt));
                 $.ajax({
                     url: base_url + '/notebook/new',
                     type: 'POST',
-                    data:{
+                    data: {
                         "_token": $('#token').val(),
-                        "receipts":myReceipt,
-                        "receiptId":ToUpdateReceiptIndex
+                        "receipts": myReceipt,
+                        "receiptId": ToUpdateReceiptIndex
                     },
-                    success: function (result) {
+                    success: function(result) {
                         var responseBody = result;
-                        
+
                         if (responseBody.success) {
                             alert("Adding Notebook Entry successful.");
                             window.location.reload();
                         }
                     },
-                    error: function (error) {
+                    error: function(error) {
                         console.log(`Error: ${error}`);
                     }
                 });
             }
         })
-    
-    
-        $(document).on('click', ".deleteItem", function () {
+
+
+        $(document).on('click', ".deleteItem", function() {
             myReceipt.deleteItemByIndex($(this).attr('class').split(/\s+/)[2]);
             $('#itemListContainer').html(myReceipt.generate());
             myReceipt.setTotalNetPrice();
             $('#total-label').html(myReceipt.getTotalNetPrice());
         });
-    
-        $(document).on('click', ".editItem", function () {
+
+        $(document).on('click', ".editItem", function() {
             $('.control').prop('disabled', true);
             toggleAddingControls(false);
             toUpdateIndex = $(this).attr('class').split(/\s+/)[2];
@@ -294,9 +294,9 @@ $(document).ready(function () {
             $('#addItemButton').val("Save");
             $(this).parent().parent().toggleClass("table-primary");
         });
-    
-    
-        $('#clearFieldsButton').on('click', function () {
+
+
+        $('#clearFieldsButton').on('click', function() {
             $('#basePrice').val(0);
             netPrice.value = 0;
             $('#discount1').val(0);
@@ -305,16 +305,16 @@ $(document).ready(function () {
             $('#discount4').val(0);
             toggleAddingControls(true);
         });
-    
-    
-        $('#clearButton').on('click',function() {
-           myReceipt.clearItems();
-           $('#itemListContainer').html(myReceipt.generate());
-           myReceipt.setTotalNetPrice();
-           $('#total-label').html(myReceipt.getTotalNetPrice());
+
+
+        $('#clearButton').on('click', function() {
+            myReceipt.clearItems();
+            $('#itemListContainer').html(myReceipt.generate());
+            myReceipt.setTotalNetPrice();
+            $('#total-label').html(myReceipt.getTotalNetPrice());
         });
-    
-    
+
+
         function setDiscounts(index, basePriceElement, discountElement) {
             try {
                 base = parseFloat(basePriceElement.val());
@@ -330,37 +330,37 @@ $(document).ready(function () {
                 netPrice.value = computeNetPrice(base, discount1.value, discount2.value, discount3.value, discount);
             }
         }
-    
+
         function generateHTMLVendors(array) {
             htmlString = "";
             vendors = array.vendors;
-    
+
             // vendors.forEach(element => {
             //     htmlString = htmlString + `<option value="${element.vid}">${element.vendor}</option>`;    
             // });
-            vendors.forEach(function (element, i) {
+            vendors.forEach(function(element, i) {
                 if (i === 0) {
                     htmlString = htmlString + `<option selected value="${element.vid}">${element.vendor}</option>`;
                 } else {
                     htmlString = htmlString + `<option value="${element.vid}">${element.vendor}</option>`;
                 }
             });
-    
+
             vendorSelection.innerHTML = htmlString;
         }
-    
+
         function generateHTMLItems(array) {
             htmlString = "";
             items = array.items;
-    
+
             items.forEach(element => {
                 htmlString = htmlString + `<option value="${element.itemno}">${element.itemdesc}</option>`
             });
-    
+
             itemsSelection.innerHTML = htmlString;
         }
-    
-    
+
+
         function computeNetPrice(base, d1, d2, d3, d4) {
             d1 = parseInt(d1);
             d2 = parseInt(d2);
@@ -368,24 +368,24 @@ $(document).ready(function () {
             d4 = parseInt(d4);
             base = parseFloat(base);
             discounts = [d1, d2, d3, d4];
-    
+
             net = base;
             discounts.forEach(element => {
                 if (element != 0) {
                     net = net + (net * (element / 100))
                 }
             });
-    
+
             return net.toFixed(2);
         }
-    
+
         function toggleAddingControls(toggle) {
             $('#discount1').prop('disabled', toggle);
             $('#discount2').prop('disabled', toggle);
             $('#discount3').prop('disabled', toggle);
             $('#discount4').prop('disabled', toggle);
-            $('#addItemButton').prop('disabled',toggle);
-        }        
+            $('#addItemButton').prop('disabled', toggle);
+        }
     }
 
 
@@ -397,22 +397,21 @@ $(document).ready(function () {
         //validate all fields before adding items    
     }
 
-    function switchClass(oldClass,newClass,element) {
+    function switchClass(oldClass, newClass, element) {
         element.removeClass(oldClass).addClass(newClass);
     }
 
-    function parsePath(originalTransactionsPath,desiredPath) {
-		var currentPath = window.location.pathname;
-		toPath = desiredPath;
-		if (currentPath.includes(originalTransactionsPath,0)) {
-			var path = currentPath.replace(originalTransactionsPath,"");
-			toPath = desiredPath + "/" + path;	
-		}else{
-			toPath = desiredPath;
-		}
+    function parsePath(originalTransactionsPath, desiredPath) {
+        var currentPath = window.location.pathname;
+        toPath = desiredPath;
+        if (currentPath.includes(originalTransactionsPath, 0)) {
+            var path = currentPath.replace(originalTransactionsPath, "");
+            toPath = desiredPath + "/" + path;
+        } else {
+            toPath = desiredPath;
+        }
 
-		return toPath;
-	}
+        return toPath;
+    }
 
-});	
-
+});

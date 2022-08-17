@@ -9,4 +9,8 @@ class Receipt extends Model
     //
     protected $table = "notebook_receipt";
     public $timestamps = true;
+
+    public function items() {
+        return $this->hasMany(ReceiptItems::class, 'receipt_id');
+    }
 }

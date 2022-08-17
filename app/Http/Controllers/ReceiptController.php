@@ -211,8 +211,9 @@ class ReceiptController extends Controller
           $nestedData[] = $editAction;
 
 
-			$data[] = $nestedData;
+		    $data[] = $nestedData;
 		}
+        
 		return DataTablesController::generateJson(intval($request->post('draw')), intval($result['total']), intval($result['totalFiltered']), $data);
     }
 

@@ -28,7 +28,7 @@ class DataTablesController extends Controller
             if ($additionalParam != null) {
                 
                 $result = $partial
-                ->orWhere([$additionalParam])
+                ->orWhere($additionalParam[0],$additionalParam[1],$additionalParam[2])
                 ->orderBy($columns[$request->post("order")[0]['column']],$request->post("order")[0]['dir'])
                 ->get();
 
@@ -36,14 +36,14 @@ class DataTablesController extends Controller
                 
                 $totalFiltered = $result->count();
 
-                $partial = $base->orWhere([$additionalParam]);
+                $partial = $base->orWhere($additionalParam[0],$additionalParam[1],$additionalParam[2]);
 
 
                 if ($whereBetween != null) {
                     $partial = $base->whereBetween($whereBetween[0],$whereBetween[1]);
 
                     $result = $partial
-                    ->orWhere($additionalParam)
+                    ->orWhere($additionalParam[0],$additionalParam[1],$additionalParam[2])
                     ->orderBy($columns[$request->post("order")[0]['column']],$request->post("order")[0]['dir'])
                     ->get();
 
@@ -87,7 +87,7 @@ class DataTablesController extends Controller
         } else {
 
             if ($additionalParam != null) {
-                $partial = $base->where([$additionalParam]);
+                $partial = $base->where($additionalParam[0],$additionalParam[1],$additionalParam[2]);
 
                 if ($whereBetween != null) {
                     $partial = $base->orWhereBetween($whereBetween[0],$whereBetween[1]);

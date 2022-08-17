@@ -18,12 +18,14 @@ use App\Http\Controllers\UpdateLocalDatabaseController;
 Route::get('/','UserController@index')->name('root');
 
 
-Route::get('/dashboard','DashboardController@index')->name('dashboard')->middleware('auth');
+Route::get('/dashboard','DashboardController@index')->name('dashboard');
+// ->middleware('auth');
 Route::get('/tester','UserController@showAll')->name('tester');
 Route::get('/logout','UserController@logoutUser')->name('logout');
 Route::post('/authenticate','UserController@authenticateUser')->name('authenticate-user');
 
-Route::get('/items','ItemCatalogController@index')->name('items')->middleware('auth');
+Route::get('/items','ItemCatalogController@index')->name('items')
+->middleware('auth');
 Route::get('/items/options','ItemCatalogController@getOptionsStringRequest')->name('items-options');
 Route::get('/items/{edititemno}','ItemCatalogController@editItem')->name('edititems');
 Route::post('/items/update/{edititemno}','ItemCatalogController@updateItem')->name('updateitems');
@@ -31,7 +33,8 @@ Route::post('/items/create','ItemCatalogController@createItem')->name('createite
 Route::post('/items/deleteitemfrombin','ItemCatalogController@deleteItemsFromBin')->name('deleteitemfrombin');
 
 
-Route::get('/vendors','VendorController@index')->name('vendors')->middleware('auth');
+Route::get('/vendors','VendorController@index')->name('vendors');
+// ->middleware('auth');
 Route::get('/vendors/{editvendorid}','VendorController@editVendor')->name('editvendors');
 Route::post('/vendors/update/{editvendorid}','VendorController@updateVendor')->name('updatevendors');
 Route::post('/vendors/create','VendorController@createVendor')->name('createvendors');
@@ -46,36 +49,49 @@ Route::post('/itembin/clearitembin','ItemBinController@clearItem')->name('cleari
 Route::post('/itembin/mark/{markitemno}','ItemBinController@markItem')->name('markitem');
 Route::post('/itembin/unmark/{unmarkitemno}','ItemBinController@unmarkItem')->name('unmarkitem');
 
-Route::get('/encode','TransactionsController@index')->name('encode')->middleware('auth');
+Route::get('/encode','TransactionsController@index')->name('encode');
+// ->middleware('auth');
 Route::get('/encode/{encodeitemno}','TransactionsController@encodeItem')->name('encodeitemno');
 
 
-Route::get('/cart','CartController@index')->name('cart')->middleware('auth');
+Route::get('/cart','CartController@index')->name('cart');
+// ->middleware('auth');
 Route::get('/cart/clear','CartController@clearCart')->name('clearcart');
 Route::get('/cart/remove/{cartid}','CartController@removeCartItem')->name('removecartitem');
 
 Route::post('/cart/add','CartController@addToCart')->name('addtocart');
 
-Route::get('/transaction/view','TransactionsController@viewTransactions')->name('viewtransactions')->middleware('auth');
-Route::get('/transaction/adminview','TransactionsController@adminViewTransactions')->name('adminviewtransactions')->middleware('auth');
+Route::get('/transaction/view','TransactionsController@viewTransactions')->name('viewtransactions');
+// ->middleware('auth');
+Route::get('/transaction/adminview','TransactionsController@adminViewTransactions')->name('adminviewtransactions');
+// ->middleware('auth');
 Route::get('/transaction/adminview/{itemno}','TransactionsController@adminViewTransactions')->name('adminviewitemtransactions');
-Route::get('/transaction/view/{itemno}','TransactionsController@viewTransactions')->name('viewitemtransactions')->middleware('auth');
+Route::get('/transaction/view/{itemno}','TransactionsController@viewTransactions')->name('viewitemtransactions');
+// ->middleware('auth');
 Route::get('/transaction/processcart','TransactionsController@processCart')->name('processcart');
 
 
-Route::get('/stocks','StockController@index')->name('stocks')->middleware('auth');
-Route::get('/stocks/admin','StockController@adminIndex')->name('adminstocks')->middleware('auth');
+Route::get('/stocks','StockController@index')->name('stocks');
+// ->middleware('auth');
+Route::get('/stocks/admin','StockController@adminIndex')->name('adminstocks');
+// ->middleware('auth');
 
-Route::get('/backup','BackupDatabaseController@index')->name('backup')->middleware('auth');
-Route::get('/backup/start','BackupDatabaseController@backupDatabase')->name('dobackup')->middleware('auth');
-Route::get('/backup/details','BackupDatabaseController@backupDetails')->name('backupdetails')->middleware('auth');
+Route::get('/backup','BackupDatabaseController@index')->name('backup');
+// ->middleware('auth');
+Route::get('/backup/start','BackupDatabaseController@backupDatabase')->name('dobackup');
+// ->middleware('auth');
+Route::get('/backup/details','BackupDatabaseController@backupDetails')->name('backupdetails');
+// ->middleware('auth');
 
-Route::get('/notebook','NoteBookController@index')->name('notebook')->middleware('auth');
+Route::get('/notebook','NoteBookController@index')->name('notebook');
+// ->middleware('auth');
 Route::post('/notebook/new','NoteBookController@newTransaction')->name('new-notebook');
-Route::get('/notebook/view','NoteBookController@viewNotebook')->name('view-notebook')->middleware('auth');
+Route::get('/notebook/view','NoteBookController@viewNotebook')->name('view-notebook');
+Route::get('/notebook/view/{itemNo}','NoteBookController@viewNotebook')->name('view-item-notebook');
+// ->middleware('auth');
 
 Route::get('/notebook/edit/{receipt_id}','NoteBookController@editIndex')->name('edit-notebook');
-Route::get('/notebook/view/receipt','NoteBookController@getNotebookReceipt')->name('receipt-notebook');
+Route::get('/notebook/receipt-view','NoteBookController@getNotebookReceipt')->name('receipt-notebook');
 
 Route::get('/receipt-item','ReceiptItemsController@getReceiptItem')->name('receipt-items');
 Route::post('/receipt-item/update','ReceiptItemsController@updateReceiptItem')->name('update-receipt-item');
@@ -97,7 +113,8 @@ Route::get('/updatelocal/{deviceCode}',
     {
         return UpdateLocalDatabaseController::updateLocal($deviceCode);        
     }
-)->name('updatelocal')->middleware('auth');
+)->name('updatelocal');
+// ->middleware('auth');
 
 
 
@@ -120,13 +137,15 @@ Route::post('/fetchadminstocks','AllStocksController@admingetAll')->name('fetcha
 Route::post('/fetchreceipts','ReceiptController@getAll')->name('fetchreceipts');
 
 Route::post('/fetchreceiptitemsoverview','ReceiptItemsOverviewController@getAll')->name('fetchreceiptitemsoverview');
+Route::post('/fetchreceiptitemsaggregated','ReceiptItemsAggregatedController@getAll')->name('fetchreceiptitemsaggregated');
 
 Route::post('/fetchtransactions','TransactionsOverviewController@getAll')->name('fetchtransactions');
 Route::post('/fetchadmintransactions','TransactionsOverviewController@getAdminTransactions')->name('fetchadmintransactions');
 Route::post('/fetchadmintransactions/{itemno}','TransactionsOverviewController@getAdminTransactions')->name('fetchadminitemtransactions');
 Route::post('/fetchtransactions/{itemno}','TransactionsOverviewController@getAll')->name('fetchitemtransactions');
 
-
-
+Route::get('/notebook/item/{itemno}','SingleNotebookItemController@index')->name('notebook.item.index');
+Route::post('/notebook/item/update/{id}','SingleNotebookItemController@update')->name('notebook.item.update');
+Route::post('/notebook/item/destroy/{id}','SingleNotebookItemController@destroy')->name('notebook.item.destroy');
 
 

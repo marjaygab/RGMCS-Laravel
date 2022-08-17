@@ -186,6 +186,7 @@
     <script src="{{asset('js/notebook/Receipt.js')}}"></script>
     <script src="{{asset('js/notebook/add-notebook-entries.js')}}"></script>
     <script src="{{asset('js/demo/toggler.js')}}"></script>
+    <script src="{{asset('js/notebook/single-item.js')}}"></script>
     
 </body>
 

@@ -95,10 +95,9 @@
             </a>
             <div id="updateLocalMenu" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                 <div class="bg-white py-1 collapse-inner rounded">
-                    {{-- <a class="collapse-item" href="login.html">From References<div><small class="text-danger d-inline-block">{{DatabaseHistoryController::generateHistoryString('REFERENCES')}}</small></div></a> --}}
-                    <a class="collapse-item" href="{{route('updatelocal',['deviceCode'=>"WAREHOUSE_ENCODER"])}}">From Warehouse Encoder <div><small class="text-danger d-inline-block">{{DatabaseHistoryController::generateHistoryString('WAREHOUSE_ENCODER')}}</small></div></a>
-                    <a class="collapse-item" href="{{route('updatelocal',['deviceCode'=>"REDOR_ENCODER"])}}">From Redor Encoder <div><small class="text-danger d-inline-block">{{DatabaseHistoryController::generateHistoryString('REDOR_ENCODER')}}</small></div></a>
-                    <a class="collapse-item" href="{{route('updatelocal',['deviceCode'=>"RENES_ENCODER"])}}">From Rene's Encoder <div><small class="text-danger d-inline-block">{{DatabaseHistoryController::generateHistoryString('RENES_ENCODER')}}</small></div></a>
+                    <a class="collapse-item" href="{{route('updatelocal',['deviceCode'=>'WAREHOUSE_ENCODER'])}}">From Warehouse Encoder <div><small class="text-danger d-inline-block">{{DatabaseHistoryController::generateHistoryString('WAREHOUSE_ENCODER')}}</small></div></a>
+                    <a class="collapse-item" href="{{route('updatelocal',['deviceCode'=>'REDOR_ENCODER'])}}">From Redor Encoder <div><small class="text-danger d-inline-block">{{DatabaseHistoryController::generateHistoryString('REDOR_ENCODER')}}</small></div></a>
+                    <a class="collapse-item" href="{{route('updatelocal',['deviceCode'=>'RENES_ENCODER'])}}">From Rene's Encoder <div><small class="text-danger d-inline-block">{{DatabaseHistoryController::generateHistoryString('RENES_ENCODER')}}</small></div></a>
                     <!-- <h6 class="collapse-header">Login Screens:</h6>
                         <a class="collapse-item" href="login.html">Login</a>
                         <a class="collapse-item" href="register.html">Register</a>

@@ -51,7 +51,7 @@ class ItemCatalogController extends Controller
     public static function generateOptionString($itemno=null){
 
         $items = self::getItems($itemno);
-        $allItems = self::getItems();
+        $allItems = self::getItems(null,null,['itemdesc','ASC']);
         if ($itemno == null) {
             $string = "<option value ='0' disabled selected>--Select Item--</option>";
             foreach ($allItems as $key => $value) {
@@ -160,7 +160,7 @@ class ItemCatalogController extends Controller
         DB::disconnect();
     }
 
-    public static function getItems($itemno = null,$first = false)
+    public static function getItems($itemno = null,$first = false,$orderBy = null)
     {
         if ($itemno != null) {
             $params = ['id'=>$itemno];
@@ -168,7 +168,7 @@ class ItemCatalogController extends Controller
             $params = null;
         }
 
-        $result = RGMCSFactory::fetchRows(new ItemCatalog(),env('DB_CONFIG_REFERENCES'),$params,$first);
+        $result = RGMCSFactory::fetchRows(new ItemCatalog(),env('DB_CONFIG_REFERENCES'),$params,$first,$orderBy);
 
         if ($result != null) {
             return $result;

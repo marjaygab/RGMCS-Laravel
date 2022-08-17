@@ -19,15 +19,7 @@
             @endif
             @csrf
                 <fieldset>
-                    @if ($errors->any())
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <div class="alert alert-danger" role="alert">
-                                    <strong>Oh no!</strong> {{$errors->first()}}
-                                </div>
-                            </div>
-                        </div>
-                    @endif
+                    Errors: {{Session::get("errors")}}
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">

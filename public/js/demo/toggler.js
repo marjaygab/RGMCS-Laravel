@@ -5,10 +5,13 @@ $(document).ready(function() {
     var toggleState = true;
 
     var toggleView = $('#toggleView').bootstrapToggle();
+    var toggleSelect = $('#toggleSelect').bootstrapToggle();
 
+    var toggleViewStatus = false;
+    var toggleSelectStatus = false;
 
-    console.log(costColumn);
-    console.log(costColumnContent);
+    console.log(toggleView);
+    console.log(toggleSelect);
 
     if (toggleButton != null && costColumn != null) {
         toggleButton.classList.add("btn-success");
@@ -50,19 +53,68 @@ $(document).ready(function() {
         toggleView.change(function() {
             if ($(this).prop('checked')) {
                 //receipt view
+
+                console.log("Receipt view");
+
                 if ($('#receiptView').hasClass('d-none')) {
                     $('#receiptView').removeClass('d-none');
                 }
-                $('#itemsView').toggleClass('d-none');
+                $('#itemsView').addClass('d-none');
+                
+                if (!$('#aggregatedItemsView').hasClass('d-none')) {
+                    $('#aggregatedItemsView').addClass('d-none');
+                }
+                
+                toggleViewStatus = true;
+                $('#toggleSelect').bootstrapToggle('disable');
             }else{
                 //items view
 
-                if ($('#itemsView').hasClass('d-none')) {
-                    $('#itemsView').removeClass('d-none');
+                console.log("Items view");
+                if(!toggleSelectStatus){
+                    if ($('#itemsView').hasClass('d-none')) {
+                        $('#itemsView').removeClass('d-none');
+                    }
+                }else{
+                    if ($('#aggregatedItemsView').hasClass('d-none')) {
+                        $('#aggregatedItemsView').removeClass('d-none');
+                    }
                 }
-                $('#receiptView').toggleClass('d-none');
 
+                $('#receiptView').addClass('d-none');
+                $('#toggleSelect').bootstrapToggle('enable');
+                // if (!$('#aggregatedItemsView').hasClass('d-none')) {
+                //     $('#aggregatedItemsView').addClass('d-none');
+                // }
+                toggleViewStatus = false;
             }        
+        });
+    }
+
+    if (toggleSelect != null && toggleView != null) {
+        $('#aggregatedItemsView').toggleClass('d-none');
+        toggleSelect.change(function () {
+            if(toggleViewStatus == false){
+                if ($(this).prop('checked')) {
+                    //aggregated view
+                    toggleSelectStatus = true;
+                    if ($('#aggregatedItemsView').hasClass('d-none')) {
+                        $('#aggregatedItemsView').removeClass('d-none');
+                    }
+                    $('#itemsView').addClass('d-none');
+
+                    console.log("Aggregated");
+                }else{
+                    //non aggregated view
+                    toggleSelectStatus = false;
+                    if ($('#itemsView').hasClass('d-none')) {
+                        $('#itemsView').removeClass('d-none');
+                    }
+                    $('#aggregatedItemsView').addClass('d-none');
+
+                    console.log("Non Aggregated");
+                }  
+            }
         });
     }
 

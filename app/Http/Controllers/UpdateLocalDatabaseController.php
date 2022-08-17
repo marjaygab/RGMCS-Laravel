@@ -50,6 +50,7 @@ class UpdateLocalDatabaseController extends Controller
     {
         if ($this->path != false) {
             $this->command = env('LOAD_DUMP_PATH') . "/mysql.exe" . " --user={$this->userName} --password={$this->passWord} {$this->dbName} < {$this->path}";
+            // dd($this->command);
             // $this->command = env('LOAD_DUMP_PATH') . "/mysql" . " -u {$this->userName} {$this->dbName} < {$this->path}";
         }else{
             $this->command = false;

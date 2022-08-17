@@ -33,6 +33,8 @@ class NoteBookController extends Controller
 
     public function viewNotebook(Request $request)
     {
+        $item_no = $request->all('item_no');
+        
         return view('viewnotebook');
     }
 
